@@ -4,13 +4,17 @@ import { headers, cookies } from "next/headers";
 // do not cache this page
 export const revalidate = 0;
 
-export default async function ServerComponent() {
-  console.log("serverComponent");
+export default async function CategoryAdd() {
   const supabase = createServerComponentSupabaseClient({
     headers,
     cookies,
   });
   const { data } = await supabase.from("categories").select("*");
 
-  return <pre>{JSON.stringify(data, null, 2)}</pre>;
+  return (
+    <>
+      <h1>Category Add</h1>
+      <pre>{JSON.stringify(data, null, 2)}</pre>)
+    </>
+  );
 }

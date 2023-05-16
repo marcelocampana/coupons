@@ -1,41 +1,42 @@
 import supabase from "./supabase";
 
 export class ApiManager {
-  static get properties() {
-    return { data: [] };
+  constructor() {
+    this.data = [];
   }
 
-  static async getData(table, filteredColumn, filteredValue) {
+  async getData(table, filteredColumn, filteredValue) {
     try {
       let { data, error } = await supabase
         .from(table)
         .select("*")
         .eq(filteredColumn, filteredValue);
       if (data) {
-        this.data = data;
+        return data;
       } else {
-        console.log(error);
+        throw new Error(`Error retrieving data: ${error}`);
       }
     } catch (error) {
       console.log(error);
+      throw error;
     }
   }
 
   async getAllData(table) {
     try {
       let { data, error } = await supabase.from(table).select("*");
-
       if (data) {
-        this.data = data;
+        return data;
       } else {
-        console.log(error);
+        throw new Error(`Error retrieving data: ${error}`);
       }
     } catch (error) {
       console.log(error);
+      throw error;
     }
   }
 
-  static async addData(table, dataToAdd) {
+  async addData(table, dataToAdd) {
     try {
       const { data, error } = await supabase
         .from(table)
@@ -49,10 +50,11 @@ export class ApiManager {
       if (data) {
         this.data = data;
       } else {
-        console.log(error);
+        throw new Error(`Error adding data: ${error}`);
       }
     } catch (error) {
       console.log(error);
+      throw error;
     }
   }
 
@@ -67,10 +69,11 @@ export class ApiManager {
       if (data) {
         this.data = data;
       } else {
-        console.log(error);
+        throw new Error(`Error updating data: ${error}`);
       }
     } catch (error) {
       console.log(error);
+      throw error;
     }
   }
 
@@ -80,8 +83,12 @@ export class ApiManager {
         .from(table)
         .delete()
         .eq(filteredColumn, filteredValue);
+      if (error) {
+        throw new Error(`Error deleting data: ${error}`);
+      }
     } catch (error) {
       console.log(error);
+      throw error;
     }
   }
 }

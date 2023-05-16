@@ -14,8 +14,14 @@ export default function SupabaseProvider({ children }) {
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(() => {
-      router.refresh();
+      router.refresh(); //router.push("/login");
     });
+    // async function getUser() {
+    //   const { data } = await supabase.auth.getUser();
+    //   let metadata = data.user_metadata;
+    //   console.log(metadata);
+    // }
+    // getUser();
 
     return () => {
       subscription.unsubscribe();
