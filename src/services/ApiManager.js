@@ -37,17 +37,19 @@ export class ApiManager {
   }
 
   async addData(table, dataToAdd) {
+    const add = {
+      created_at: "2023-05-12",
+      updated_at: "2023-05-12",
+      start_date: new Date(),
+      end_date: new Date(),
+      ...dataToAdd,
+    };
+    console.log(add);
     try {
-      const { data, error } = await supabase
-        .from(table)
-        .insert({
-          created_at: new Date(),
-          updated_at: new Date(),
-          ...dataToAdd,
-        })
-        .select();
+      const { data, error } = await supabase.from(table).insert(add).select();
 
       if (data) {
+        console.log(data);
         this.data = data;
       } else {
         throw new Error(`Error adding data: ${error}`);

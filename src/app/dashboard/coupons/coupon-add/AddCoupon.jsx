@@ -1,17 +1,25 @@
 "use client";
-
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-
+import { useSupabase } from "../../../supabase-provider";
 import Input from "@/app/components/FormInput";
 import Select from "@/app/components/FormSelect";
 import Textarea from "@/app/components/FormTextarea";
 import FormButton from "@/app/components/FormButton";
 import GridForm from "@/app/components/UtilsGrid";
 import Divider from "@/app/components/UtilsDivider";
-import { ApiManager } from "@/services/ApiManager";
 
 const AddCoupon = () => {
+  const { supabase } = useSupabase();
+
+  const handleInsert = async (dataInsert) => {
+    const { data, error } = await supabase
+      .from("coupons")
+      .insert(dataInsert)
+      .select();
+
+    console.log(data, error);
+  };
   return (
     <Formik
       initialValues={{
@@ -33,14 +41,17 @@ const AddCoupon = () => {
         terms_and_conditions: Yup.string().required("Requerido"),
       })}
       onSubmit={async (values, { setSubmitting }) => {
+        const dataInsert = {
+          business_id: "802aeee9-6617-4d61-bba5-e7f02bf8093a",
+          created_at: new Date(),
+          updated_at: new Date(),
+          ...values,
+        };
+
         setTimeout(() => {
-          console.log("aqui");
-          const updateValues = {
-            ...values,
-          };
+          console.log(dataInsert);
 
-          ApiManager.addData("coupons", updateValues);
-
+          handleInsert(dataInsert);
           setSubmitting(false);
         }, 400);
       }}
@@ -53,7 +64,7 @@ const AddCoupon = () => {
             name="category_id"
             type="text"
             label="Categorias"
-            values={[1, 2, 3]}
+            values={[1, 2, 3, 6]}
           />
         </GridForm>
 
@@ -74,13 +85,13 @@ const AddCoupon = () => {
           <Field
             as={Input}
             name="max_redeems_per_user"
-            type="text"
+            type="number"
             label="Máximo de canjes por usuario"
           />
           <Field
             as={Input}
             name="max_total_redeems"
-            type="text"
+            type="number"
             prompt="0 para ilimitado"
             label="Máximo de canjes por promoción"
           />
