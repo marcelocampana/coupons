@@ -3,8 +3,6 @@
 import { useSupabase } from "../../supabase-provider";
 import FormButton from "@/app/components/FormButton";
 import Input from "@/app/components/FormInput";
-import InputEmail from "@/app/components/FormInputEmail";
-import InputRut from "@/app/components/FormInputRut";
 import Select from "@/app/components/FormSelect";
 import UtilsDivider from "@/app/components/UtilsDivider";
 import GridForm from "@/app/components/UtilsGrid";
@@ -16,6 +14,18 @@ import * as Yup from "yup";
 
 const NewBusiness = () => {
   const { supabase } = useSupabase();
+
+  async function checkIfValueExistsInDatabase(
+    valueToValidate,
+    tableToValidate,
+    columnToValidate
+  ) {
+    const { data } = await supabase
+      .from(tableToValidate)
+      .select(columnToValidate)
+      .eq(columnToValidate, valueToValidate);
+    return data.length > 0;
+  }
 
   const handleInsert = async (dataInsert) => {
     const email = dataInsert.account_contact_email;
@@ -85,8 +95,21 @@ const NewBusiness = () => {
         validationSchema={Yup.object({
           business_display_name: Yup.string().required("Requerido"),
           business_email: Yup.string()
+            .required("Requerido")
             .email("Email inválido")
-            .required("Requerido"),
+            .test(
+              "email-exists",
+              "Este email ya está registrado",
+              async (value) => {
+                const exists = await checkIfValueExistsInDatabase(
+                  value,
+                  "businesses",
+                  "business_email"
+                );
+                return !exists; // La prueba fallará si el RUT existe
+              }
+            ),
+
           business_main_phone: Yup.string().required("Requerido"),
           business_address: Yup.string().required("Requerido"),
           business_commune: Yup.string().required("Requerido"),
@@ -94,9 +117,18 @@ const NewBusiness = () => {
           business_legal_name: Yup.string().required("Requerido"),
           business_rut: Yup.string()
             .required("Requerido")
-            .matches(
-              /^\d{1,2}\d{3}\d{3}[-][0-9kK]{1}$/,
-              "El formato del RUT no es válido"
+            .matches(/^\d{1,2}\d{3}\d{3}[-][0-9kK]{1}$/, "Rut inválido")
+            .test(
+              "rut-exists",
+              "Este Rut ya está registrado",
+              async (value) => {
+                const exists = await checkIfValueExistsInDatabase(
+                  value,
+                  "businesses",
+                  "business_rut"
+                );
+                return !exists; // La prueba fallará si el RUT existe
+              }
             ),
 
           legal_representative_firstname: Yup.string().required("Requerido"),
@@ -105,8 +137,20 @@ const NewBusiness = () => {
           admin_contact_firstname: Yup.string().required("Requerido"),
           admin_contact_lastname: Yup.string().required("Requerido"),
           admin_contact_email: Yup.string()
+            .required("Requerido")
             .email("Email inválido")
-            .required("Requerido"),
+            .test(
+              "email-exists",
+              "Este email ya está registrado",
+              async (value) => {
+                const exists = await checkIfValueExistsInDatabase(
+                  value,
+                  "businesses",
+                  "admin_contact_email"
+                );
+                return !exists; // La prueba fallará si el RUT existe
+              }
+            ),
           admin_contact_phone: Yup.string().required("Requerido"),
           account_contact_email: Yup.string()
             .email("Email inválido")
@@ -132,7 +176,7 @@ const NewBusiness = () => {
           }, 400);
         }}
       >
-        {({ setFieldValue, setFieldError, values }) => (
+        {({ setFieldValue }) => (
           <Form className="my-6 space-y-2">
             <GridForm cols="2">
               <Field
@@ -142,7 +186,7 @@ const NewBusiness = () => {
                 label="Nombre del comercio"
               />
               <Field
-                as={InputEmail}
+                as={Input}
                 name="business_email"
                 type="text"
                 label="Email del comercio"
@@ -155,7 +199,7 @@ const NewBusiness = () => {
                 label="Razón social"
               />
               <Field
-                as={InputRut}
+                as={Input}
                 name="business_rut"
                 type="text"
                 label="RUT del comercio"
@@ -218,7 +262,10 @@ const NewBusiness = () => {
                 label="RUT"
               />
             </GridForm>
-            <UtilsDivider title="Datos del administrador del comercio" />
+            <UtilsDivider
+              title="Cuenta de acceso del administrador del comercio"
+              description="Crea tus credenciales para administrar el comercio"
+            />
             <GridForm cols="2">
               <Field
                 name="admin_contact_firstname"
@@ -233,38 +280,24 @@ const NewBusiness = () => {
                 label="Apellidos"
               />
               <Field
-                name="admin_contact_email"
-                type="email"
-                as={InputEmail}
-                label="Email"
-                onChange={(e) => {
-                  setFieldValue("account_contact_email", e.target.value);
-                  setFieldValue("admin_contact_email", e.target.value);
-                }}
-              />
-              <Field
                 name="admin_contact_phone"
                 type="text"
                 as={Input}
                 label="Teléfono"
               />
             </GridForm>
-            <UtilsDivider
-              title="Cuenta de acceso del administrador"
-              description="Estas serán tus credenciales para administrar el comercio"
-            />
-
-            <GridForm cols="2">
+            <UtilsDivider />
+            <GridForm cols="1">
               <Field
-                name="account_contact_email"
+                name="admin_contact_email"
                 type="email"
                 as={Input}
                 label="Email"
                 note="Este email será tu usuario de acceso"
                 autoComplete="username"
-                readOnly
               />
-              <div></div>
+            </GridForm>
+            <GridForm cols="2">
               <Field
                 name="account_contact_password"
                 type="password"
@@ -281,6 +314,7 @@ const NewBusiness = () => {
                 autoComplete="new-password"
               />
             </GridForm>
+
             <UtilsDivider />
             <FormButton label="Inscribir Comercio" />
           </Form>
