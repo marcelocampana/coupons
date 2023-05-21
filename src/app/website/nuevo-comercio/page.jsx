@@ -1,5 +1,7 @@
-const AddBusinessPage = () => {
-  return <div>AddBusinessPage </div>;
+import NewBusiness from "./NewBusiness";
+
+const NewBusinessPage = () => {
+  return <NewBusiness />;
 };
 
-export default AddBusinessPage;
+export default NewBusinessPage;
