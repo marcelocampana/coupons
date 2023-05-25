@@ -11,9 +11,12 @@ import WebWidth from "@/app/components/WebWidth";
 import { Auth } from "@/services/Auth";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
+import { useRouter } from "next/navigation";
+import InputPhone from "@/app/components/FormInputPhone";
 
 const NewBusiness = () => {
   const { supabase } = useSupabase();
+  const router = useRouter();
 
   async function checkIfValueExistsInDatabase(
     valueToValidate,
@@ -28,39 +31,39 @@ const NewBusiness = () => {
   }
 
   const handleInsert = async (dataInsert) => {
-    const email = dataInsert.account_contact_email;
-    const password = dataInsert.account_contact_password;
+    const email = dataInsert.admin_contact_email;
+    const password = dataInsert.admin_contact_password;
     const firstname = dataInsert.admin_contact_firstname;
     const lastname = dataInsert.admin_contact_lastname;
     const role = "business-admin";
+    const phone = dataInsert.admin_contact_phone;
 
     const auth = new Auth();
     const signUpResult = await auth.signUp(
-      { email, password, firstname, lastname, role },
+      { email, password, firstname, lastname, role, phone },
       supabase
     );
 
     if (Object.keys(signUpResult.user).length !== 0) {
       const { id: userId } = signUpResult.user;
       const {
-        account_contact_email,
-        account_contact_password,
-        account_contact_confirm_password,
+        admin_contact_password,
+        admin_contact_confirm_password,
         ...insertData
       } = dataInsert;
 
       try {
         const { data, error } = await supabase
-          .from("businesses")
+          .from("business_admission_requests")
           .insert({
-            admin_user_id: userId,
+            applicant_user_id: userId,
             created_at: new Date(),
             updated_at: new Date(),
             ...insertData,
           })
           .select();
         if (data) {
-          router.push("/success-business-record");
+          router.push("/website/success-business-record");
         } else if (error) throw new Error(error);
       } catch (error) {
         console.log(error);
@@ -88,9 +91,8 @@ const NewBusiness = () => {
           admin_contact_lastname: "",
           admin_contact_email: "",
           admin_contact_phone: "",
-          account_contact_email: "",
-          account_contact_password: "",
-          account_contact_confirm_password: "",
+          admin_contact_password: "",
+          admin_contact_confirm_password: "",
         }}
         validationSchema={Yup.object({
           business_display_name: Yup.string().required("Requerido"),
@@ -108,9 +110,24 @@ const NewBusiness = () => {
                 );
                 return !exists; // La prueba fallará si el RUT existe
               }
+            )
+            .test(
+              "email-exists",
+              "Este email ya tiene una solicitud en curso",
+              async (value) => {
+                const exists = await checkIfValueExistsInDatabase(
+                  value,
+                  "business_admission_requests",
+                  "business_email"
+                );
+                return !exists; // La prueba fallará si el RUT existe
+              }
             ),
 
-          business_main_phone: Yup.string().required("Requerido"),
+          business_main_phone: Yup.number()
+            .typeError("Debe incluir solo números")
+            .min(100000000, "Debe incluir al menos 9 dígitos")
+            .required("Requerido"),
           business_address: Yup.string().required("Requerido"),
           business_commune: Yup.string().required("Requerido"),
           business_city: Yup.string().required("Requerido"),
@@ -129,11 +146,25 @@ const NewBusiness = () => {
                 );
                 return !exists; // La prueba fallará si el RUT existe
               }
+            )
+            .test(
+              "rut-exists",
+              "Este Rut ya tiene una solicitud en curso",
+              async (value) => {
+                const exists = await checkIfValueExistsInDatabase(
+                  value,
+                  "business_admission_requests",
+                  "business_rut"
+                );
+                return !exists; // La prueba fallará si el RUT existe
+              }
             ),
 
           legal_representative_firstname: Yup.string().required("Requerido"),
           legal_representative_lastname: Yup.string().required("Requerido"),
-          legal_representative_rut: Yup.string().required("Requerido"),
+          legal_representative_rut: Yup.string()
+            .required("Requerido")
+            .matches(/^\d{1,2}\d{3}\d{3}[-][0-9kK]{1}$/, "Rut inválido"),
           admin_contact_firstname: Yup.string().required("Requerido"),
           admin_contact_lastname: Yup.string().required("Requerido"),
           admin_contact_email: Yup.string()
@@ -145,23 +176,23 @@ const NewBusiness = () => {
               async (value) => {
                 const exists = await checkIfValueExistsInDatabase(
                   value,
-                  "businesses",
-                  "admin_contact_email"
+                  "profiles",
+                  "email"
                 );
                 return !exists; // La prueba fallará si el RUT existe
               }
             ),
-          admin_contact_phone: Yup.string().required("Requerido"),
-          account_contact_email: Yup.string()
-            .email("Email inválido")
+          admin_contact_phone: Yup.number()
+            .typeError("Debe incluir solo números")
+            .min(100000000, "Debe incluir al menos 9 dígitos")
             .required("Requerido"),
-          account_contact_password: Yup.string()
+          admin_contact_password: Yup.string()
             .required("Requerido")
             .min(8, "La contraseña debe tener al menos 8 caracteres"),
-          account_contact_confirm_password: Yup.string()
+          admin_contact_confirm_password: Yup.string()
             .required("Requerido")
             .oneOf(
-              [Yup.ref("account_contact_password"), null],
+              [Yup.ref("admin_contact_password"), null],
               "Las contraseñas no coinciden"
             ),
         })}
@@ -176,149 +207,148 @@ const NewBusiness = () => {
           }, 400);
         }}
       >
-        {({ setFieldValue }) => (
-          <Form className="my-6 space-y-2">
-            <GridForm cols="2">
-              <Field
-                as={Input}
-                name="business_display_name"
-                type="text"
-                label="Nombre del comercio"
-              />
-              <Field
-                as={Input}
-                name="business_email"
-                type="text"
-                label="Email del comercio"
-                note="Tus clientes te contactan aquí"
-              />
-              <Field
-                as={Input}
-                name="business_legal_name"
-                type="text"
-                label="Razón social"
-              />
-              <Field
-                as={Input}
-                name="business_rut"
-                type="text"
-                label="RUT del comercio"
-                note="Ej: 12345678-9"
-              />
-            </GridForm>
-            <UtilsDivider title="Contacto y ubicación del comercio" />
-            <GridForm cols="2">
-              <Field
-                as={Input}
-                name="business_main_phone"
-                type="text"
-                label="Teléfono principal"
-              />
-              <Field
-                name="business_address"
-                type="text"
-                as={Input}
-                label="Dirección"
-              />
-              <Field
-                as={Select}
-                name="business_commune"
-                type="text"
-                label="Comuna"
-                options={[
-                  { value: 1, label: "Las Condes" },
-                  { value: 2, label: "Lo Barnechea" },
-                  { value: 3, label: "Vitacura" },
-                ]}
-                note="Tu comercio debe ubicarse en una de estas comunas"
-              />
-              <Field
-                name="business_city"
-                type="text"
-                as={Input}
-                label="Ciudad"
-                readOnly
-              />
-            </GridForm>
-
-            <UtilsDivider title="Datos del representante legal" />
-            <GridForm cols="2">
-              <Field
-                name="legal_representative_firstname"
-                type="text"
-                as={Input}
-                label="Nombres"
-              />
-              <Field
-                name="legal_representative_lastname"
-                type="text"
-                as={Input}
-                label="Apellidos"
-              />
-              <Field
-                name="legal_representative_rut"
-                type="text"
-                as={Input}
-                label="RUT"
-              />
-            </GridForm>
-            <UtilsDivider
-              title="Cuenta de acceso del administrador del comercio"
-              description="Crea tus credenciales para administrar el comercio"
+        <Form className="my-6 space-y-2">
+          <GridForm cols="2">
+            <Field
+              as={Input}
+              name="business_display_name"
+              type="text"
+              label="Nombre del comercio"
             />
-            <GridForm cols="2">
-              <Field
-                name="admin_contact_firstname"
-                type="text"
-                as={Input}
-                label="Nombre"
-              />
-              <Field
-                name="admin_contact_lastname"
-                type="text"
-                as={Input}
-                label="Apellidos"
-              />
-              <Field
-                name="admin_contact_phone"
-                type="text"
-                as={Input}
-                label="Teléfono"
-              />
-            </GridForm>
-            <UtilsDivider />
-            <GridForm cols="1">
-              <Field
-                name="admin_contact_email"
-                type="email"
-                as={Input}
-                label="Email"
-                note="Este email será tu usuario de acceso"
-                autoComplete="username"
-              />
-            </GridForm>
-            <GridForm cols="2">
-              <Field
-                name="account_contact_password"
-                type="password"
-                as={Input}
-                label="Crea una contraseña"
-                autoComplete="new-password"
-              />
+            <Field
+              as={Input}
+              name="business_email"
+              type="text"
+              label="Email del comercio"
+              note="Tus clientes te contactan aquí"
+            />
+            <Field
+              as={Input}
+              name="business_legal_name"
+              type="text"
+              label="Razón social"
+            />
+            <Field
+              as={Input}
+              name="business_rut"
+              type="text"
+              label="RUT del comercio"
+              note="Ej: 12345678-9"
+            />
+          </GridForm>
+          <UtilsDivider title="Contacto y ubicación del comercio" />
+          <GridForm cols="2">
+            <Field
+              as={InputPhone}
+              name="business_main_phone"
+              type="text"
+              label="Teléfono principal"
+            />
+            <Field
+              name="business_address"
+              type="text"
+              as={Input}
+              label="Dirección"
+            />
+            <Field
+              as={Select}
+              name="business_commune"
+              type="text"
+              label="Comuna"
+              options={[
+                { value: "Las Condes", label: "Las Condes" },
+                { value: "Lo Barnechea", label: "Lo Barnechea" },
+                { value: "Vitacura", label: "Vitacura" },
+              ]}
+              note="Tu comercio debe ubicarse en una de estas comunas"
+            />
+            <Field
+              name="business_city"
+              type="text"
+              as={Input}
+              label="Ciudad"
+              readOnly
+            />
+          </GridForm>
 
-              <Field
-                name="account_contact_confirm_password"
-                type="password"
-                as={Input}
-                label="Repite la contraseña"
-                autoComplete="new-password"
-              />
-            </GridForm>
+          <UtilsDivider title="Datos del representante legal" />
+          <GridForm cols="2">
+            <Field
+              name="legal_representative_firstname"
+              type="text"
+              as={Input}
+              label="Nombres"
+            />
+            <Field
+              name="legal_representative_lastname"
+              type="text"
+              as={Input}
+              label="Apellidos"
+            />
+            <Field
+              name="legal_representative_rut"
+              type="text"
+              as={Input}
+              label="RUT"
+              note="Ej: 12345678-9"
+            />
+          </GridForm>
+          <UtilsDivider
+            title="Cuenta de acceso del administrador del comercio"
+            description="Crea tus credenciales para administrar el comercio"
+          />
+          <GridForm cols="2">
+            <Field
+              name="admin_contact_firstname"
+              type="text"
+              as={Input}
+              label="Nombre"
+            />
+            <Field
+              name="admin_contact_lastname"
+              type="text"
+              as={Input}
+              label="Apellidos"
+            />
+            <Field
+              name="admin_contact_phone"
+              type="text"
+              as={InputPhone}
+              label="Teléfono"
+            />
+          </GridForm>
+          <UtilsDivider />
+          <GridForm cols="1">
+            <Field
+              name="admin_contact_email"
+              type="email"
+              as={Input}
+              label="Email"
+              note="Este email será tu usuario de acceso"
+              autoComplete="username"
+            />
+          </GridForm>
+          <GridForm cols="2">
+            <Field
+              name="admin_contact_password"
+              type="password"
+              as={Input}
+              label="Crea una contraseña"
+              autoComplete="new-password"
+            />
 
-            <UtilsDivider />
-            <FormButton label="Inscribir Comercio" />
-          </Form>
-        )}
+            <Field
+              name="admin_contact_confirm_password"
+              type="password"
+              as={Input}
+              label="Repite la contraseña"
+              autoComplete="new-password"
+            />
+          </GridForm>
+
+          <UtilsDivider />
+          <FormButton label="Inscribir Comercio" />
+        </Form>
       </Formik>
     </WebWidth>
   );

@@ -13,8 +13,8 @@ const SignupConfirm = () => {
         <div className="text-center">
           <p className="text-base font-semibold text-indigo-600"></p>
           <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-3xl">
-            El registro del comercio ha sido ingresado con éxito, pronto nos
-            comunicaremos contigo.
+            La solicitud de registro de comercio ha sido ingresado con éxito,
+            <p> pronto nos comunicaremos contigo.</p>
           </h1>
           <div className="mt-6 text-lg leading-7 text-gray-600">
             <p>

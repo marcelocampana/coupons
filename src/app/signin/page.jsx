@@ -18,26 +18,25 @@ export default function Login() {
       if (activeSession.data.session) {
         const { data: profile } = await supabase
           .from("profiles")
-          .select("role, firstname, business_id")
+          .select("role, firstname") //, business_id")
           .eq("id", activeSession.data.session.user.id);
+        if (profile[0].role === "business-admin") {
+          // if (
+          //   profile[0].role === "business-admin" &&
+          //   profile[0].business_id === null
+          // ) {
+          //   const { data } = await supabase
+          //     .from("business_admission_requests")
+          //     .select("business_admission_request_id")
+          //     .eq("applicant_user_id", activeSession.data.session.user.id);
 
-        if (
-          profile[0].role === "business-admin" &&
-          profile[0].business_id === null
-        ) {
-          const { data } = await supabase
-            .from("businesses")
-            .select("business_id")
-            .eq("admin_user_id", activeSession.data.session.user.id);
+          //   if (data) {
+          // await supabase
+          //   .from("profiles")
+          //   .update({ business_id: data[0].business_id })
+          //   .eq("id", activeSession.data.session.user.id);
 
-          if (data) {
-            await supabase
-              .from("profiles")
-              .update({ business_id: data[0].business_id })
-              .eq("id", activeSession.data.session.user.id);
-
-            router.push("/dashboard");
-          }
+          router.push("/dashboard");
         } else router.push(profile[0].role === "end-user" ? "/" : "/dashboard");
       } else {
         console.log("error", error);

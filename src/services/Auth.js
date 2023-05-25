@@ -2,13 +2,11 @@ export class Auth {
   static get properties() {
     return {
       user: { type: String },
-      success: { type: Boolean },
     };
   }
 
   constructor() {
     this.user = null;
-    this.success = false;
   }
 
   signUp = async (signUpData, supabase) => {
@@ -20,18 +18,18 @@ export class Auth {
           data: {
             firstname: signUpData.firstname,
             lastname: signUpData.lastname,
+            email: signUpData.email,
             role: signUpData.role,
+            phone: signUpData.phone,
           },
         },
       });
 
       if (data) {
-        this.success = true;
         this.user = data.user;
-        console.log(this.user);
         return data;
       } else {
-        console.log("error", error);
+        throw new Error("error", error);
       }
     } catch (error) {
       console.log(error);
