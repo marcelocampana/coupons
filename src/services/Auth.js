@@ -1,38 +1,59 @@
 export class Auth {
-  static get properties() {
-    return {
-      user: { type: String },
-    };
-  }
+  static properties = {
+    user: String,
+  };
 
-  constructor() {
-    this.user = null;
-  }
+  user = null;
 
-  signUp = async (signUpData, supabase) => {
-    try {
-      const { data, error } = await supabase.auth.signUp({
-        email: signUpData.email,
-        password: signUpData.password,
-        options: {
-          data: {
-            firstname: signUpData.firstname,
-            lastname: signUpData.lastname,
-            email: signUpData.email,
-            role: signUpData.role,
-            phone: signUpData.phone,
-          },
-        },
-      });
+  signIn = async (body) => {
+    const response = await fetch("/api/v1/auth/signin", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+    const result = await response.json();
+    console.log(result);
+    return result;
+  };
 
-      if (data) {
-        this.user = data.user;
-        return data;
-      } else {
-        throw new Error("error", error);
-      }
-    } catch (error) {
-      console.log(error);
-    }
+  signUp = async (body) => {
+    const response = await fetch("/api/v1/auth/signup", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+    const result = await response.json();
+    console.log(result);
+    return result;
+  };
+
+  passwordRecovery = async (body) => {
+    const response = await fetch("/api/v1/auth/password-recovery", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+    const result = await response.json();
+    console.log(result);
+    return result;
+  };
+
+  passwordReset = async (body) => {
+    const response = await fetch("/api/v1/auth/password-reset", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
+    const result = await response.json();
+    console.log(result);
+    return result;
   };
 }

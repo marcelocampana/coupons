@@ -1,8 +1,10 @@
 import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { headers, cookies } from "next/headers";
+import BusinessAdmissionRequest from "@/services/BusinessAdmissionRequest";
+import ServerAuth from "@/services/ServerAuth";
 import DetailRows from "./DetailRows";
 import Subtitle from "./Subtitle";
-import UpdateRequestStatus from "./UpdateRequestStatus";
+import Header from "./Header";
 
 const BusinessDetail = async ({ req }) => {
   const supabase = createServerComponentSupabaseClient({
@@ -10,19 +12,18 @@ const BusinessDetail = async ({ req }) => {
     cookies,
   });
 
-  const { data: currentUser } = await supabase.auth.getUser();
+  const serverAuth = new ServerAuth();
+  const currentUser = await serverAuth.getCurrentUser();
 
-  const { data: request } = await supabase
-    .from("business_admission_requests")
-    .select("*")
-    .eq("business_admission_request_id", req.params.id);
+  const dbQuery = new BusinessAdmissionRequest(supabase);
+  const request = await dbQuery.getRecordById(req.params.id);
 
   const { request_status, business_admission_request_id, applicant_user_id } =
     request[0];
 
   return (
     <div>
-      <UpdateRequestStatus
+      <Header
         requestId={business_admission_request_id}
         requestStatus={request_status}
         userId={currentUser.user.id}

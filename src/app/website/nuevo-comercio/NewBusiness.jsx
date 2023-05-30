@@ -1,46 +1,59 @@
 "use client";
 
+import { useState } from "react";
 import { useSupabase } from "../../supabase-provider";
-import FormButton from "@/app/components/FormButton";
-import Input from "@/app/components/FormInput";
-import Select from "@/app/components/FormSelect";
-import UtilsDivider from "@/app/components/UtilsDivider";
-import GridForm from "@/app/components/UtilsGrid";
-import WebHeading from "@/app/components/WebHeading";
-import WebWidth from "@/app/components/WebWidth";
-import { Auth } from "@/services/Auth";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { useRouter } from "next/navigation";
-import InputPhone from "@/app/components/FormInputPhone";
+import {
+  FormButton,
+  Input,
+  Select,
+  UtilsDivider,
+  GridForm,
+  WebHeading,
+  WebWidth,
+  InputPhone,
+} from "@/app/components";
+import { ClientAuth, BusinessAdmissionRequest } from "@/services";
 
 const NewBusiness = () => {
   const { supabase } = useSupabase();
   const router = useRouter();
+  const [submitting, setSubmitting] = useState(false);
 
-  async function checkIfValueExistsInDatabase(
+  const checkIfValueExistsInDatabase = async (
     valueToValidate,
     tableToValidate,
     columnToValidate
-  ) {
+  ) => {
     const { data } = await supabase
       .from(tableToValidate)
       .select(columnToValidate)
       .eq(columnToValidate, valueToValidate);
     return data.length > 0;
-  }
+  };
 
   const handleInsert = async (dataInsert) => {
-    const email = dataInsert.admin_contact_email;
-    const password = dataInsert.admin_contact_password;
-    const firstname = dataInsert.admin_contact_firstname;
-    const lastname = dataInsert.admin_contact_lastname;
+    const {
+      admin_contact_email: email,
+      admin_contact_password: password,
+      admin_contact_firstname: firstname,
+      admin_contact_lastname: lastname,
+      admin_contact_phone: phone,
+    } = dataInsert;
     const role = "business-admin";
-    const phone = dataInsert.admin_contact_phone;
+    const terms = "Si";
 
-    const auth = new Auth();
-    const signUpResult = await auth.signUp(
-      { email, password, firstname, lastname, role, phone },
+    const clientAuth = new ClientAuth();
+    const signUpResult = await clientAuth.signUp(
+      firstname,
+      lastname,
+      email,
+      password,
+      phone,
+      role,
+      terms,
       supabase
     );
 
@@ -53,21 +66,143 @@ const NewBusiness = () => {
       } = dataInsert;
 
       try {
-        const { data, error } = await supabase
-          .from("business_admission_requests")
-          .insert({
-            applicant_user_id: userId,
-            created_at: new Date(),
-            updated_at: new Date(),
-            ...insertData,
-          })
-          .select();
+        const dbQuery = new BusinessAdmissionRequest(supabase);
+        const data = await dbQuery.insertRecord({
+          applicant_user_id: userId,
+          created_at: new Date(),
+          updated_at: new Date(),
+          ...insertData,
+        });
+
         if (data) {
           router.push("/website/success-business-record");
-        } else if (error) throw new Error(error);
+        } else {
+          throw new Error("Error al insertar el registro del comercio.");
+        }
       } catch (error) {
         console.log(error);
       }
+    }
+  };
+
+  const initialValues = {
+    business_display_name: "",
+    business_email: "",
+    business_main_phone: "",
+    business_address: "",
+    business_commune: "",
+    business_city: "Santiago",
+    business_legal_name: "",
+    business_rut: "",
+    legal_representative_firstname: "",
+    legal_representative_lastname: "",
+    legal_representative_rut: "",
+    admin_contact_firstname: "",
+    admin_contact_lastname: "",
+    admin_contact_email: "",
+    admin_contact_phone: "",
+    admin_contact_password: "",
+    admin_contact_confirm_password: "",
+  };
+
+  const validationSchema = Yup.object({
+    business_display_name: Yup.string().required("Requerido"),
+    business_email: Yup.string()
+      .required("Requerido")
+      .email("Email inválido")
+      .test(
+        "email-exists",
+        "Este email ya está registrado",
+        async (value) =>
+          !(await checkIfValueExistsInDatabase(
+            value,
+            "businesses",
+            "business_email"
+          ))
+      )
+      .test(
+        "email-exists",
+        "Este email ya tiene una solicitud en curso",
+        async (value) =>
+          !(await checkIfValueExistsInDatabase(
+            value,
+            "business_admission_requests",
+            "business_email"
+          ))
+      ),
+    business_main_phone: Yup.number()
+      .typeError("Debe incluir solo números")
+      .min(100000000, "Debe incluir al menos 9 dígitos")
+      .required("Requerido"),
+    business_address: Yup.string().required("Requerido"),
+    business_commune: Yup.string().required("Requerido"),
+    business_city: Yup.string().required("Requerido"),
+    business_legal_name: Yup.string().required("Requerido"),
+    business_rut: Yup.string()
+      .required("Requerido")
+      .matches(/^\d{1,2}\d{3}\d{3}[-][0-9kK]{1}$/, "Rut inválido")
+      .test(
+        "rut-exists",
+        "Este Rut ya está registrado",
+        async (value) =>
+          !(await checkIfValueExistsInDatabase(
+            value,
+            "businesses",
+            "business_rut"
+          ))
+      )
+      .test(
+        "rut-exists",
+        "Este Rut ya tiene una solicitud en curso",
+        async (value) =>
+          !(await checkIfValueExistsInDatabase(
+            value,
+            "business_admission_requests",
+            "business_rut"
+          ))
+      ),
+    legal_representative_firstname: Yup.string().required("Requerido"),
+    legal_representative_lastname: Yup.string().required("Requerido"),
+    legal_representative_rut: Yup.string()
+      .required("Requerido")
+      .matches(/^\d{1,2}\d{3}\d{3}[-][0-9kK]{1}$/, "Rut inválido"),
+    admin_contact_firstname: Yup.string().required("Requerido"),
+    admin_contact_lastname: Yup.string().required("Requerido"),
+    admin_contact_email: Yup.string()
+      .required("Requerido")
+      .email("Email inválido")
+      .test(
+        "email-exists",
+        "Este email ya está registrado",
+        async (value) =>
+          !(await checkIfValueExistsInDatabase(value, "profiles", "email"))
+      ),
+    admin_contact_phone: Yup.number()
+      .typeError("Debe incluir solo números")
+      .min(100000000, "Debe incluir al menos 9 dígitos")
+      .required("Requerido"),
+    admin_contact_password: Yup.string()
+      .required("Requerido")
+      .min(8, "La contraseña debe tener al menos 8 caracteres"),
+    admin_contact_confirm_password: Yup.string()
+      .required("Requerido")
+      .oneOf(
+        [Yup.ref("admin_contact_password"), null],
+        "Las contraseñas no coinciden"
+      ),
+  });
+
+  const handleSubmit = async (values) => {
+    setSubmitting(true);
+
+    const dataInsert = { ...values };
+
+    try {
+      await handleInsert(dataInsert);
+      setSubmitting(false);
+    } catch (error) {
+      console.log(error);
+      setSubmitting(false);
     }
   };
 
@@ -75,140 +210,12 @@ const NewBusiness = () => {
     <WebWidth>
       <WebHeading title="Inscribe tu comercio" />
       <Formik
-        initialValues={{
-          business_display_name: "",
-          business_email: "",
-          business_main_phone: "",
-          business_address: "",
-          business_commune: "",
-          business_city: "Santiago",
-          business_legal_name: "",
-          business_rut: "",
-          legal_representative_firstname: "",
-          legal_representative_lastname: "",
-          legal_representative_rut: "",
-          admin_contact_firstname: "",
-          admin_contact_lastname: "",
-          admin_contact_email: "",
-          admin_contact_phone: "",
-          admin_contact_password: "",
-          admin_contact_confirm_password: "",
-        }}
-        validationSchema={Yup.object({
-          business_display_name: Yup.string().required("Requerido"),
-          business_email: Yup.string()
-            .required("Requerido")
-            .email("Email inválido")
-            .test(
-              "email-exists",
-              "Este email ya está registrado",
-              async (value) => {
-                const exists = await checkIfValueExistsInDatabase(
-                  value,
-                  "businesses",
-                  "business_email"
-                );
-                return !exists; // La prueba fallará si el RUT existe
-              }
-            )
-            .test(
-              "email-exists",
-              "Este email ya tiene una solicitud en curso",
-              async (value) => {
-                const exists = await checkIfValueExistsInDatabase(
-                  value,
-                  "business_admission_requests",
-                  "business_email"
-                );
-                return !exists; // La prueba fallará si el RUT existe
-              }
-            ),
-
-          business_main_phone: Yup.number()
-            .typeError("Debe incluir solo números")
-            .min(100000000, "Debe incluir al menos 9 dígitos")
-            .required("Requerido"),
-          business_address: Yup.string().required("Requerido"),
-          business_commune: Yup.string().required("Requerido"),
-          business_city: Yup.string().required("Requerido"),
-          business_legal_name: Yup.string().required("Requerido"),
-          business_rut: Yup.string()
-            .required("Requerido")
-            .matches(/^\d{1,2}\d{3}\d{3}[-][0-9kK]{1}$/, "Rut inválido")
-            .test(
-              "rut-exists",
-              "Este Rut ya está registrado",
-              async (value) => {
-                const exists = await checkIfValueExistsInDatabase(
-                  value,
-                  "businesses",
-                  "business_rut"
-                );
-                return !exists; // La prueba fallará si el RUT existe
-              }
-            )
-            .test(
-              "rut-exists",
-              "Este Rut ya tiene una solicitud en curso",
-              async (value) => {
-                const exists = await checkIfValueExistsInDatabase(
-                  value,
-                  "business_admission_requests",
-                  "business_rut"
-                );
-                return !exists; // La prueba fallará si el RUT existe
-              }
-            ),
-
-          legal_representative_firstname: Yup.string().required("Requerido"),
-          legal_representative_lastname: Yup.string().required("Requerido"),
-          legal_representative_rut: Yup.string()
-            .required("Requerido")
-            .matches(/^\d{1,2}\d{3}\d{3}[-][0-9kK]{1}$/, "Rut inválido"),
-          admin_contact_firstname: Yup.string().required("Requerido"),
-          admin_contact_lastname: Yup.string().required("Requerido"),
-          admin_contact_email: Yup.string()
-            .required("Requerido")
-            .email("Email inválido")
-            .test(
-              "email-exists",
-              "Este email ya está registrado",
-              async (value) => {
-                const exists = await checkIfValueExistsInDatabase(
-                  value,
-                  "profiles",
-                  "email"
-                );
-                return !exists; // La prueba fallará si el RUT existe
-              }
-            ),
-          admin_contact_phone: Yup.number()
-            .typeError("Debe incluir solo números")
-            .min(100000000, "Debe incluir al menos 9 dígitos")
-            .required("Requerido"),
-          admin_contact_password: Yup.string()
-            .required("Requerido")
-            .min(8, "La contraseña debe tener al menos 8 caracteres"),
-          admin_contact_confirm_password: Yup.string()
-            .required("Requerido")
-            .oneOf(
-              [Yup.ref("admin_contact_password"), null],
-              "Las contraseñas no coinciden"
-            ),
-        })}
-        onSubmit={async (values, { setSubmitting }) => {
-          const dataInsert = {
-            ...values,
-          };
-
-          setTimeout(() => {
-            handleInsert(dataInsert);
-            setSubmitting(false);
-          }, 400);
-        }}
+        initialValues={initialValues}
+        validationSchema={validationSchema}
+        onSubmit={handleSubmit}
       >
         <Form className="my-6 space-y-2">
-          <GridForm cols="2">
+          <GridForm cols="2" gapx="20">
             <Field
               as={Input}
               name="business_display_name"
@@ -318,7 +325,7 @@ const NewBusiness = () => {
             />
           </GridForm>
           <UtilsDivider />
-          <GridForm cols="1">
+          <GridForm cols="2">
             <Field
               name="admin_contact_email"
               type="email"
@@ -327,8 +334,6 @@ const NewBusiness = () => {
               note="Este email será tu usuario de acceso"
               autoComplete="username"
             />
-          </GridForm>
-          <GridForm cols="2">
             <Field
               name="admin_contact_password"
               type="password"
@@ -336,7 +341,6 @@ const NewBusiness = () => {
               label="Crea una contraseña"
               autoComplete="new-password"
             />
-
             <Field
               name="admin_contact_confirm_password"
               type="password"
@@ -345,9 +349,12 @@ const NewBusiness = () => {
               autoComplete="new-password"
             />
           </GridForm>
-
           <UtilsDivider />
-          <FormButton label="Inscribir Comercio" />
+          <FormButton
+            label="Inscribir Comercio"
+            disabled={submitting}
+            submitting={submitting}
+          />
         </Form>
       </Formik>
     </WebWidth>

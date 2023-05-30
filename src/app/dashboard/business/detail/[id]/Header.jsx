@@ -5,13 +5,10 @@ import { CheckIcon, TrashIcon } from "@heroicons/react/20/solid";
 import Modal from "./Modal";
 import { ClipboardDocumentListIcon } from "@heroicons/react/24/outline";
 
-const UpdateRequestStatus = ({
-  requestId,
-  requestStatus,
-  userId,
-  applicantUserId,
-}) => {
+const Header = ({ requestId, requestStatus, userId, applicantUserId }) => {
   //const { supabase } = useSupabase();
+
+  console.log(applicantUserId);
 
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [openModalInProccess, setOpenModalInProccess] = useState(false);
@@ -41,7 +38,6 @@ const UpdateRequestStatus = ({
       </div>
     );
   };
-  console.log(requestDeleted);
 
   return (
     <>
@@ -126,4 +122,4 @@ const UpdateRequestStatus = ({
   );
 };
 
-export default UpdateRequestStatus;
+export default Header;

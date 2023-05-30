@@ -5,6 +5,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { useSupabase } from "@/app/supabase-provider";
 import { useRouter } from "next/navigation";
+import deleteUser from "../../../../../helpers/deleteUser";
 
 const Modal = ({
   warningTitle,
@@ -17,6 +18,7 @@ const Modal = ({
   action,
   applicantUserId,
 }) => {
+  console.log(applicantUserId);
   const cancelButtonRef = useRef(null);
   const { supabase } = useSupabase();
   const router = useRouter();
@@ -38,44 +40,11 @@ const Modal = ({
       .eq("business_admission_request_id", requestId);
 
     if (!error) {
-      const { data: profile, error } = await supabase
-        .from("profiles")
-        .delete()
-        .eq("id", applicantUserId);
-
-      console.log("profile", profile);
-
-      if (!error) {
-        const handleDeleteUser = async () => {
-          try {
-            const response = await fetch("/api/delete-user", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ userId: applicantUserId }),
-            });
-
-            const result = await response.json();
-
-            if (response.ok) {
-              console.log("Usuario eliminado exitosamente");
-            } else {
-              console.error("Error al eliminar el usuario:", result.error);
-            }
-          } catch (error) {
-            console.error(
-              "Error al comunicarse con el servidor:",
-              error.message
-            );
-          }
-        };
-
-        handleDeleteUser();
-        setOpen(false);
-        router.push("/dashboard/business/confirm-delete");
-      }
+      if (deleteUser(applicantUserId));
+      router.push("/dashboard/business/confirm-delete");
     }
+
+    setOpen(false);
   };
 
   const handleRequest = async (requestAction) => {

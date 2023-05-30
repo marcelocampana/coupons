@@ -11,7 +11,12 @@ import SideBar3Menu from "./SideBar3Menu";
 
 const navigation = [
   { name: "Dashboard", href: "#", icon: HomeIcon, current: true },
-  { name: "Team", href: "#", icon: UsersIcon, current: false },
+  {
+    name: "Solicitudes de ingreso",
+    href: "/dashboard/business/list",
+    icon: UsersIcon,
+    current: false,
+  },
   { name: "Projects", href: "#", icon: FolderIcon, current: false },
   { name: "Calendar", href: "#", icon: CalendarIcon, current: false },
   { name: "Documents", href: "#", icon: DocumentDuplicateIcon, current: false },

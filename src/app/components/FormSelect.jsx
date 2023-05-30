@@ -14,7 +14,7 @@ export default function Select(props) {
         <select
           {...rest}
           value={value}
-          className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:max-w-xs sm:text-sm"
+          className="block w-full max-w-lg rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500  sm:text-sm"
         >
           <option value="">Selecciona una opción</option>
           {props.options.map((option, i) => (
