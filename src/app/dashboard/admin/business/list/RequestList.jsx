@@ -92,7 +92,7 @@ const RequestList = async () => {
                   </td>
                   <td className="relative py-4 pl-3 text-right text-sm font-medium">
                     <a
-                      href={`/dashboard/business/detail/${request.business_admission_request_id}`}
+                      href={`/dashboard/admin/business/detail/${request.business_admission_request_id}`}
                       className="text-indigo-600 hover:text-indigo-900"
                     >
                       {request.admission_is_approved ? "Ver" : "Revisar"}

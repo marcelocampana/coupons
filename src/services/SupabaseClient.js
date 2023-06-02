@@ -49,10 +49,12 @@ class SupabaseClient {
     return data;
   }
 
-  async updateRecord(record) {
+  async updateRecord(columnId, id, recordsToUpdate) {
     const { data, error } = await this.supabase
       .from(this.tableName)
-      .update(record);
+      .update(recordsToUpdate)
+      .eq(columnId, id)
+      .select();
 
     if (error) {
       throw new Error(error.message);

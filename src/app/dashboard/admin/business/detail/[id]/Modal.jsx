@@ -5,7 +5,7 @@ import { Dialog, Transition } from "@headlessui/react";
 import { ExclamationTriangleIcon } from "@heroicons/react/24/outline";
 import { useSupabase } from "@/app/supabase-provider";
 import { useRouter } from "next/navigation";
-import deleteUser from "../../../../../helpers/deleteUser";
+import deleteUser from "../../../../../../helpers/deleteUser";
 
 const Modal = ({
   warningTitle,

@@ -13,7 +13,7 @@ const navigation = [
   { name: "Dashboard", href: "#", icon: HomeIcon, current: true },
   {
     name: "Solicitudes de ingreso",
-    href: "/dashboard/business/list",
+    href: "/dashboard/admin/business/list",
     icon: UsersIcon,
     current: false,
   },

@@ -1,5 +1,4 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import { useSupabase } from "../../../../supabase-provider";
@@ -9,71 +8,28 @@ import Textarea from "@/app/components/FormTextarea";
 import FormButton from "@/app/components/FormButton";
 import GridForm from "@/app/components/UtilsGrid";
 import Divider from "@/app/components/UtilsDivider";
-import { usePathname } from "next/navigation";
 
-const UpdateCoupon = () => {
-  const pathname = usePathname();
-
+const AddCoupon = () => {
   const { supabase } = useSupabase();
-  const [coupons, setCoupons] = useState([]);
-  const [categories, setCategories] = useState([]);
 
-  const couponId = pathname.split("/")[4];
-
-  const handleUpdate = async (dataToUpdate) => {
+  const handleInsert = async (dataInsert) => {
     const { data, error } = await supabase
       .from("coupons")
-      .update(dataToUpdate)
-      .eq("coupon_id", couponId);
+      .insert(dataInsert)
+      .select();
 
     console.log(data, error);
   };
-
-  useEffect(() => {
-    const fetchCoupons = async () => {
-      const { data } = await supabase
-        .from("coupons")
-        .select("*")
-        .eq("coupon_id", couponId);
-      setCoupons(data);
-    };
-    const fetchCategories = async () => {
-      const { data } = await supabase
-        .from("categories")
-        .select("name, category_id");
-      const newKeys = data.map((category) => ({
-        value: category.category_id,
-        label: category.name,
-      }));
-      setCategories(newKeys);
-    };
-
-    fetchCoupons();
-    fetchCategories();
-  }, []);
-  console.log(coupons);
-
-  console.log(categories);
-
   return (
     <Formik
-      enableReinitialize
       initialValues={{
-        title: coupons.length > 0 ? coupons[0].title : "Cargando...",
-        category_id: coupons.length > 0 ? coupons[0].category_id : 0,
-        start_date:
-          coupons.length > 0 &&
-          new Date(coupons[0].start_date).toISOString().split("T")[0],
-
-        end_date:
-          coupons.length > 0 &&
-          new Date(coupons[0].end_date).toISOString().split("T")[0],
-
-        max_redeems_per_user:
-          coupons.length > 0 && coupons[0].max_redeems_per_user,
-        max_total_redeems: coupons.length > 0 && coupons[0].max_total_redeems,
-        terms_and_conditions:
-          coupons.length > 0 ? coupons[0].terms_and_conditions : "Cargando...",
+        title: "",
+        category_id: "",
+        start_date: "",
+        end_date: "",
+        max_redeems_per_user: "",
+        max_total_redeems: "",
+        terms_and_conditions: "",
       }}
       validationSchema={Yup.object({
         title: Yup.string().required("Requerido"),
@@ -85,7 +41,7 @@ const UpdateCoupon = () => {
         terms_and_conditions: Yup.string().required("Requerido"),
       })}
       onSubmit={async (values, { setSubmitting }) => {
-        const dataToUpdate = {
+        const dataInsert = {
           business_id: "802aeee9-6617-4d61-bba5-e7f02bf8093a",
           created_at: new Date(),
           updated_at: new Date(),
@@ -93,9 +49,9 @@ const UpdateCoupon = () => {
         };
 
         setTimeout(() => {
-          // console.log(dataToUpdate);
+          console.log(dataInsert);
 
-          handleUpdate(dataToUpdate);
+          handleInsert(dataInsert);
           setSubmitting(false);
         }, 400);
       }}
@@ -108,7 +64,7 @@ const UpdateCoupon = () => {
             name="category_id"
             type="text"
             label="Categorias"
-            options={categories}
+            values={[1, 2, 3, 6]}
           />
         </GridForm>
 
@@ -152,4 +108,4 @@ const UpdateCoupon = () => {
   );
 };
 
-export default UpdateCoupon;
+export default AddCoupon;
