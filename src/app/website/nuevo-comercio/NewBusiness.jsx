@@ -351,6 +351,8 @@ const NewBusiness = () => {
               note="Este email será tu usuario de acceso"
               autoComplete="username"
             />
+          </GridForm>
+          <GridForm cols="2">
             <Field
               name="admin_contact_password"
               type="password"
@@ -366,6 +368,7 @@ const NewBusiness = () => {
               autoComplete="new-password"
             />
           </GridForm>
+
           <UtilsDivider />
           <FormButton
             label="Inscribir Comercio"
