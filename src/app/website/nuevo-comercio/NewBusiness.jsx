@@ -20,7 +20,7 @@ import { ClientAuth, BusinessAdmissionRequest } from "@/services";
 const NewBusiness = () => {
   const { supabase } = useSupabase();
   const router = useRouter();
-  const [submitting, setSubmitting] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const checkIfValueExistsInDatabase = async (
     valueToValidate,
@@ -204,17 +204,15 @@ const NewBusiness = () => {
   });
 
   const handleSubmit = async (values) => {
-    setSubmitting(true);
-
     const dataInsert = { ...values };
 
-    try {
-      await handleInsert(dataInsert);
-      setSubmitting(false);
-    } catch (error) {
-      console.log(error);
-      setSubmitting(false);
-    }
+    // try {
+    //   await handleInsert(dataInsert);
+    //   setSubmitting(true);
+    // } catch (error) {
+    //   console.log(error);
+    //   setSubmitting(false);
+    // }
   };
 
   return (
@@ -223,7 +221,15 @@ const NewBusiness = () => {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={handleSubmit}
+        onSubmit={async (values, { setSubmitting }) => {
+          setLoading(true);
+          const dataInsert = { ...values };
+          await handleInsert(dataInsert);
+          setTimeout(() => {
+            setSubmitting(false);
+            setLoading(false);
+          }, 400);
+        }}
       >
         <Form className="my-6 space-y-2">
           <GridForm cols="2" gapx="20">
@@ -363,8 +369,8 @@ const NewBusiness = () => {
           <UtilsDivider />
           <FormButton
             label="Inscribir Comercio"
-            disabled={submitting}
-            submitting={submitting}
+            loading={loading}
+            textLoading="Enviando..."
           />
         </Form>
       </Formik>

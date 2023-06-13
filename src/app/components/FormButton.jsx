@@ -1,19 +1,17 @@
 import { classNames } from "@/helpers/classnames";
 
-export default function FormButton(props) {
+export default function FormButton({ loading, label, textLoading }) {
   return (
     <div className="text-right">
       <button
-        {...props}
+        disabled={loading}
         type="submit"
         className={classNames(
-          "rounded  py-2 px-4 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
-          props.submitting === "true"
-            ? "cursor-not-allowed bg-indigo-300 hover:bg-indigo-300"
-            : "bg-indigo-600 hover:bg-indigo-500"
+          "rounded  py-3 px-8 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-500 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
+          loading && "cursor-not-allowed opacity-50"
         )}
       >
-        {props.label}
+        {loading ? textLoading : label}
       </button>
     </div>
   );
