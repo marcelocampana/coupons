@@ -1,4 +1,4 @@
-const DetailRows = ({ title, value, span }) => {
+const DetailRow = ({ title, value, span }) => {
   return (
     <div
       className={`border-t border-gray-100 px-4 py-6 sm:col-span-${span} sm:px-0`}
@@ -15,4 +15,4 @@ const DetailRows = ({ title, value, span }) => {
   );
 };
 
-export default DetailRows;
+export default DetailRow;

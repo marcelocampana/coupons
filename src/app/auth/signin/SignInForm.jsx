@@ -29,6 +29,7 @@ const SignInForm = () => {
       );
 
       if (user) {
+        console.log(user);
         if (user.user_metadata.role === "business-admin") {
           router.push("/dashboard");
         } else

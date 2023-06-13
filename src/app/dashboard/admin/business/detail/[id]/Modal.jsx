@@ -14,46 +14,69 @@ const Modal = ({
   setOpen,
   buttonLabel,
   requestId,
-  userAdminId,
+  adminId,
   action,
   applicantUserId,
+  color,
 }) => {
-  console.log(applicantUserId);
   const cancelButtonRef = useRef(null);
   const { supabase } = useSupabase();
   const router = useRouter();
 
-  const updateRequestStatus = async (requestId, userId, newStatus) => {
+  const updateRequestStatus = async (requestId, newStatus, adminId) => {
+    let updateData = {};
+    if (newStatus === "En revisión") {
+      updateData = {
+        request_status: newStatus,
+        request_viewer: adminId,
+        updated_at: new Date(),
+        admin_updated_at: new Date(),
+      };
+    } else if (newStatus === "Admitida") {
+      updateData = {
+        request_status: newStatus,
+        request_viewer: adminId,
+        updated_at: new Date(),
+        admin_updated_at: new Date(),
+        request_approved_at: new Date(),
+        request_approved_by: adminId,
+      };
+    }
+
     const { data, error } = await supabase
       .from("business_admission_requests")
-      .update({ request_status: newStatus }) //, request_viewer: userId
+      .update(updateData)
       .eq("business_admission_request_id", requestId)
       .select();
     console.log(error, data);
   };
 
   const deleteRequest = async (requestId) => {
-    console.log("applicantId", applicantUserId);
-    const { error } = await supabase
-      .from("business_admission_requests")
-      .delete()
-      .eq("business_admission_request_id", requestId);
+    if (applicantUserId) {
+      console.log(applicantUserId);
+      await supabase
+        .from("business_admission_requests")
+        .delete()
+        .eq("business_admission_request_id", requestId);
 
-    if (!error) {
-      if (deleteUser(applicantUserId));
-      router.push("/dashboard/business/confirm-delete");
+      const result = await deleteUser(applicantUserId);
+      console.log("result", result);
+
+      // if (result) {
+      //   router.push("/dashboard/admin/business/confirm-delete");
+      // }
+
+      setOpen(false);
     }
-
-    setOpen(false);
   };
 
   const handleRequest = async (requestAction) => {
-    if (requestAction === "review") {
-      updateRequestStatus(requestId, userId, "En revisión");
+    if (requestAction === "en revisión") {
+      updateRequestStatus(requestId, "En revisión", adminId);
     } else if (requestAction === "delete") {
       deleteRequest(requestId);
-    } else if (requestAction === "publish") {
-      updateRequestStatus(requestId, userId, "Archivado");
+    } else if (requestAction === "admitida") {
+      updateRequestStatus(requestId, "Admitida", adminId);
     }
     setOpen(false);
   };
@@ -92,10 +115,10 @@ const Modal = ({
               <Dialog.Panel className="relative transform overflow-hidden rounded-lg bg-white px-4 pb-4 pt-5 text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg sm:p-6">
                 <div className="sm:flex sm:items-start">
                   <div
-                    className={`mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10`}
+                    className={`mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-${color}-100 sm:mx-0 sm:h-10 sm:w-10`}
                   >
                     <ExclamationTriangleIcon
-                      className={`h-6 w-6 text-red-600`}
+                      className={`h-6 w-6 text-${color}-600`}
                       aria-hidden="true"
                     />
                   </div>
@@ -116,7 +139,7 @@ const Modal = ({
                 <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
                   <button
                     type="button"
-                    className={`inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto`}
+                    className={`inline-flex w-full justify-center rounded-md bg-${color}-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-${color}-500 sm:ml-3 sm:w-auto`}
                     onClick={() => handleRequest(action)}
                   >
                     {buttonLabel}

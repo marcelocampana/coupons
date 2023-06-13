@@ -1,43 +1,53 @@
 import supabase from "@/connections/supabase";
+//import { supabase } from "@/connections/supabase-admin";
 
-const deleteUser = async ({ userId }) => {
-  async function handleDeleteUser() {
-    try {
-      const response = await fetch("/api/delete-user", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId: userId }),
-      });
+async function handleDeleteUser(id) {
+  try {
+    const response = await fetch("/api/delete-user", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId: id }),
+    });
 
-      const result = await response.json();
+    const result = await response.json();
 
-      if (response.ok) {
-        return true;
-      } else {
-        console.error("Failed to delete user:", result.error);
-        return false;
-      }
-    } catch (error) {
-      console.error("Failed to delete user:", error);
-      return false;
-    }
-  }
+    console.log(result);
 
-  async function deleteProfile() {
-    console.log(userId);
-    const { error } = await supabase.from("profiles").delete().eq("id", userId);
-
-    if (error) {
-      console.error("Error deleting profile:", error);
-      return false;
+    if (response.ok) {
+      return true;
     } else {
-      return handleDeleteUser();
+      return false;
     }
+  } catch (error) {
+    return false;
   }
+}
 
-  return await deleteProfile();
+async function deleteProfile(id) {
+  const profileDeleteResult = await supabase
+    .from("profiles")
+    .delete()
+    .eq("id", id);
+
+  console.log(profileDeleteResult);
+
+  if (profileDeleteResult.error) {
+    console.error("Error deleting profile:", error);
+    return false;
+  } else {
+    const resultDeleteUser = await handleDeleteUser(id);
+    console.log("resultDeleteUser", resultDeleteUser);
+    return resultDeleteUser;
+  }
+}
+
+const deleteUser = async (id) => {
+  await deleteProfile(id);
+  const resultDeleteUser = await handleDeleteUser(id);
+  console.log("resultDeleteUser", resultDeleteUser);
+  return resultDeleteUser;
 };
 
 export default deleteUser;

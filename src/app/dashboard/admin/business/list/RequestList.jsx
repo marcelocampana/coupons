@@ -1,6 +1,8 @@
 import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { headers, cookies } from "next/headers";
 import BusinessAdmissionRequest from "@/services/BusinessAdmissionRequest";
+import { classNames } from "@/helpers/classnames";
+import Profiles from "@/services/Profiles";
 
 export const revalidate = 0;
 
@@ -12,6 +14,14 @@ const RequestList = async () => {
 
   const dbQuery = new BusinessAdmissionRequest(supabase);
   const businessAdmissionRequests = await dbQuery.getAllRecords();
+
+  const getProfileById = async (id) => {
+    const profileQuery = new Profiles(supabase);
+    const profile = await profileQuery.getRecordById(id);
+    const firstname = profile[0].firstname;
+    const lastname = profile[0].lastname;
+    return `${firstname} ${lastname}`;
+  };
 
   return (
     <div>
@@ -65,6 +75,12 @@ const RequestList = async () => {
                 >
                   Estado de solicitud
                 </th>
+                <th
+                  scope="col"
+                  className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                >
+                  Revisor
+                </th>
                 <th scope="col" className="relative py-3.5 pl-3">
                   <span className="sr-only">Edit</span>
                 </th>
@@ -88,14 +104,35 @@ const RequestList = async () => {
                     {new Date(request.created_at).toLocaleDateString("es-CL")}
                   </td>
                   <td className="px-3 py-4 text-sm text-gray-500">
-                    {request.request_status}
+                    <div
+                      className={classNames(
+                        "inline-flex items-center rounded-full px-2 py-1 text-xs font-medium  ring-1 ring-inset",
+                        request.request_statuss === "En revisión"
+                          ? "bg-yellow-50 text-yellow-600 ring-yellow-600/20"
+                          : request.request_status
+                          ? "bg-green-50 text-green-600 ring-green-600/20"
+                          : request.request_status
+                          ? "bg-gray-50 text-gray-600 ring-gray-600/20"
+                          : null
+                      )}
+                    >
+                      {" "}
+                      {request.request_status}
+                    </div>
+                  </td>
+                  <td className="px-3 py-4 text-sm text-gray-500">
+                    {request.request_viewer
+                      ? getProfileById(request.request_viewer)
+                      : "---"}
                   </td>
                   <td className="relative py-4 pl-3 text-right text-sm font-medium">
                     <a
                       href={`/dashboard/admin/business/detail/${request.business_admission_request_id}`}
                       className="text-indigo-600 hover:text-indigo-900"
                     >
-                      {request.admission_is_approved ? "Ver" : "Revisar"}
+                      {request.request_status === "Admitida"
+                        ? "Ver"
+                        : "Revisar"}
                       <span className="sr-only">
                         , {request.business_admission_request_id}
                       </span>

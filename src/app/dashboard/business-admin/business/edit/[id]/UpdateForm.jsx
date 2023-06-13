@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useSupabase } from "../../../../../supabase-provider";
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 
 import {
@@ -26,9 +26,6 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
 
   const [submitting, setSubmitting] = useState(false);
   const [show, setShow] = useState(false);
-
-  // const [coverImageURL, setCoverImageURL] = useState("");
-  // const [logoImageURL, setLogoImageURL] = useState("");
 
   const {
     business_admission_request_id,
@@ -67,15 +64,12 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
         .upload(filePath, imageValues);
 
       if (error && error.error === "Duplicate") {
-        const { data: updatedData, error: updateError } = await supabase.storage
+        const { error: updateError } = await supabase.storage
           .from("business_images")
           .update(filePath, imageValues, fileOptions);
 
         if (updateError) {
-          console.log("Hubo un error actualizando la imagen:", updateError);
-        } else {
-          console.log(updatedData);
-          console.log("Imagen actualizada correctamente");
+          console.log(updateError);
         }
       }
 
@@ -103,13 +97,20 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
     const { business_logo_url, business_cover_url, ...dataToFinalUpdate } =
       dataToUpdate;
 
-    const logoImageURL = await handleImageUpload(business_logo_url, "logo");
-    const coverImageURL = await handleImageUpload(business_cover_url, "cover");
+    const logoImageURL =
+      typeof business_logo_url !== "string"
+        ? await handleImageUpload(business_logo_url, "logo")
+        : business_logo_url;
 
-    console.log(logoImageURL.publicUrl, coverImageURL.publicUrl);
+    const coverImageURL =
+      typeof business_cover_url !== "string"
+        ? await handleImageUpload(business_cover_url, "cover")
+        : business_cover_url;
+
     try {
       const dataUpdate = {
         updated_at: new Date(),
+        business_admin_updated_at: new Date(),
         business_logo_url: logoImageURL.publicUrl,
         business_cover_url: coverImageURL.publicUrl,
         ...dataToFinalUpdate,
@@ -143,7 +144,7 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
     business_legal_name,
     business_rut,
     business_logo_url,
-    business_cover_url: business_cover_url ? business_cover_url.name : "",
+    business_cover_url,
     business_description,
     legal_representative_firstname,
     legal_representative_lastname,
@@ -243,31 +244,37 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
       .min(100000000, "Debe incluir al menos 9 dígitos"),
     business_cover_url: Yup.mixed()
       .test("fileType", "Formato de imagen inválido", (value) => {
-        console.log("value", value);
         const supportedFormats = ["image/jpeg", "image/png"];
-        return value && supportedFormats.includes(value.type);
+        return typeof value !== "string"
+          ? value && supportedFormats.includes(value.type)
+          : true;
       })
       .test(
         "fileSize",
-        "Tamaño de imagen demasiado grande (Máximo 0.5 MB)",
+        "Tamaño de imagen es superior al permitido (Máximo 0.5 MB)",
         (value) => {
           const maxSizeInBytes = 0.5 * 1024 * 1024; // 0.5 MB
-          return value && value.size <= maxSizeInBytes;
+          return typeof value !== "string"
+            ? value && value.size <= maxSizeInBytes
+            : true;
         }
       )
       .required("Imagen destacada es requerida"),
     business_logo_url: Yup.mixed()
       .test("fileType", "Formato de imagen inválido", (value) => {
-        console.log("value", value);
         const supportedFormats = ["image/jpeg", "image/png"];
-        return value && supportedFormats.includes(value.type);
+        return typeof value !== "string"
+          ? value && supportedFormats.includes(value.type)
+          : true;
       })
       .test(
         "fileSize",
-        "Tamaño de imagen demasiado grande (Máximo 0.5 MB)",
+        "Tamaño de imagen es superior al permitido (Máximo 0.5 MB)",
         (value) => {
           const maxSizeInBytes = 0.5 * 1024 * 1024; // 0.5 MB
-          return value && value.size <= maxSizeInBytes;
+          return typeof value !== "string"
+            ? value && value.size <= maxSizeInBytes
+            : true;
         }
       )
       .required("Logo es requerido"),
@@ -275,7 +282,6 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
 
   const handleSubmit = async (values) => {
     setSubmitting(true);
-    console.log("bcp", values);
 
     const dataToUpdate = { ...values };
 
@@ -291,7 +297,7 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
   return (
     <WebWidth>
       <WebHeading title="Datos del comercio" />
-
+      <div className="text-sm text-gray-600 mt-1">Estado: En revisión</div>
       <UtilsSuccessNotification
         show={show}
         setShow={setShow}
@@ -341,6 +347,7 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
               note="Este logo será el que se muestre en la página de tu comercio (Medidas recomendadas: 300x300 pixeles)"
               setFieldValue={setFieldValue}
               imageSize="h-20 w-20"
+              dbUrl={business_logo_url}
             />
             <Field
               name="business_cover_url"
@@ -349,6 +356,7 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
               note="Esta imagen será la que se muestre en la página de tu comercio (Medidas recomendadas: 1920x1080 pixeles)"
               setFieldValue={setFieldValue}
               imageSize="w-full"
+              dbUrl={business_cover_url}
             />
 
             <Field

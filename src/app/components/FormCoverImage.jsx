@@ -2,7 +2,7 @@ import { PhotoIcon } from "@heroicons/react/24/outline";
 import { ErrorMessage } from "formik";
 import { useState } from "react";
 
-const InputImage = ({ label, note, name, setFieldValue, imageSize }) => {
+const InputImage = ({ label, note, name, setFieldValue, imageSize, dbUrl }) => {
   const [fileValues, setFileValues] = useState("");
 
   const handleFileChange = (e) => {
@@ -30,7 +30,14 @@ const InputImage = ({ label, note, name, setFieldValue, imageSize }) => {
                 className={`${imageSize} object-cover mx-auto`}
               />
             )}
-          {!fileValues && (
+          {!fileValues && dbUrl && (
+            <img
+              src={dbUrl}
+              alt="imagen"
+              className={`${imageSize} object-cover mx-auto`}
+            />
+          )}
+          {!fileValues && !dbUrl && (
             <PhotoIcon
               className="mx-auto h-12 w-12 text-gray-300"
               aria-hidden="true"

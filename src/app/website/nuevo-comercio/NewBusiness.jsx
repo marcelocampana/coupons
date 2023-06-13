@@ -67,10 +67,21 @@ const NewBusiness = () => {
 
       try {
         const dbQuery = new BusinessAdmissionRequest(supabase);
+        console.log({
+          applicant_user_id: userId,
+          created_at: new Date(),
+          updated_at: new Date(),
+          admin_updated_at: new Date(),
+          business_admin_updated_at: new Date(),
+          ...insertData,
+        });
+
         const data = await dbQuery.insertRecord({
           applicant_user_id: userId,
           created_at: new Date(),
           updated_at: new Date(),
+          admin_updated_at: new Date(),
+          business_admin_updated_at: new Date(),
           ...insertData,
         });
 
