@@ -24,8 +24,8 @@ import UtilsSuccessNotification from "@/app/components/UtilsSuccessNotification"
 const UpdateForm = ({ businessAdmissionRequestsData }) => {
   const { supabase } = useSupabase();
 
-  const [submitting, setSubmitting] = useState(false);
   const [show, setShow] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
     business_admission_request_id,
@@ -280,20 +280,6 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
       .required("Logo es requerido"),
   });
 
-  const handleSubmit = async (values) => {
-    setSubmitting(true);
-
-    const dataToUpdate = { ...values };
-
-    try {
-      await handleUpdate(dataToUpdate);
-      setSubmitting(false);
-    } catch (error) {
-      console.log(error);
-      setSubmitting(false);
-    }
-  };
-
   return (
     <WebWidth>
       <WebHeading title="Datos del comercio" />
@@ -307,7 +293,14 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
-        onSubmit={handleSubmit}
+        onSubmit={async (values, { setSubmitting }) => {
+          setLoading(true);
+          const dataToUpdate = { ...values };
+          await handleUpdate(dataToUpdate);
+          setTimeout(() => {
+            setLoading(false);
+          }, 400);
+        }}
       >
         {({ setFieldValue }) => (
           <Form className="my-6 space-y-2">
@@ -484,9 +477,9 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
             <UtilsDivider />
 
             <FormButton
-              label={submitting ? "Actualizando..." : "Actualizar datos"}
-              disabled={submitting}
-              submitting={submitting.toString()}
+              label="Actualizar datos"
+              loading={loading}
+              textLoading="Actualizando..."
             />
           </Form>
         )}

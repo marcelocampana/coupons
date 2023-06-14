@@ -49,8 +49,6 @@ const AddCoupon = () => {
         };
 
         setTimeout(() => {
-          console.log(dataInsert);
-
           handleInsert(dataInsert);
           setSubmitting(false);
         }, 400);

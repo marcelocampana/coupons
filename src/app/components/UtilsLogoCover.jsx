@@ -1,4 +1,4 @@
-const ImageHeader = ({ cover, logo }) => {
+const UtilsLogoCover = ({ logo, cover }) => {
   return (
     <>
       <div className="relative z-0 mt-5">
@@ -19,4 +19,4 @@ const ImageHeader = ({ cover, logo }) => {
   );
 };
 
-export default ImageHeader;
+export default UtilsLogoCover;

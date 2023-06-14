@@ -93,8 +93,6 @@ const UpdateCoupon = () => {
         };
 
         setTimeout(() => {
-          // console.log(dataToUpdate);
-
           handleUpdate(dataToUpdate);
           setSubmitting(false);
         }, 400);

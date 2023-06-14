@@ -13,8 +13,6 @@ async function handleDeleteUser(id) {
 
     const result = await response.json();
 
-    console.log(result);
-
     if (response.ok) {
       return true;
     } else {

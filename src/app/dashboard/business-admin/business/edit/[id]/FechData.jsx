@@ -9,8 +9,6 @@ const FechData = async ({ req }) => {
     cookies,
   });
 
-  console.log(req.params.id);
-
   const dbQuery = new BusinessAdmissionRequest(supabase);
   const businessAdmissionRequestsData = await dbQuery.getRecordById(
     req.params.id

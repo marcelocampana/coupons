@@ -12,7 +12,6 @@ const PasswordResetForm = () => {
   const [displayForm, setDisplayForm] = useState(false);
   const handlePasswordRecovery = async (values) => {
     const { password } = values;
-    console.log(password);
     const { data, error } = await supabase.auth.updateUser({
       password: password,
     });
@@ -22,7 +21,6 @@ const PasswordResetForm = () => {
   useEffect(() => {
     supabase.auth.onAuthStateChange(async (event, session) => {
       if (event == "PASSWORD_RECOVERY") {
-        console.log(session);
         setDisplayForm(true);
       }
     });

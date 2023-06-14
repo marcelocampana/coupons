@@ -11,26 +11,27 @@ import Modal from "./Modal";
 import { ClockIcon, RocketLaunchIcon } from "@heroicons/react/24/outline";
 import { formatDateHour } from "@/helpers/formatDateHours";
 import Profiles from "@/services/Profiles";
-import { classNames } from "@/helpers/classnames";
+import UtilsBARStatus from "@/app/components/UtilsBARStatus";
+import Button from "./Button";
 
-const Header = ({
+const Heading = ({
   requestId,
-  requestStatus,
-  adminId,
   applicantUserId,
+  currentAdminId,
   requestViewer,
   createdAt,
   adminUpdatedAt,
   businessAdminUpdatedAt,
+  status,
 }) => {
+  const { supabase } = useSupabase();
+
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [openModalInProccess, setOpenModalInProccess] = useState(false);
   const [openModalPost, setOpenModalPost] = useState(false);
   const [requestDeleted, setRequestDeleted] = useState(false);
   const [requestViewerFullName, setRequestViewerFullName] = useState(null);
   const [realtimeStatus, setRealtimeStatus] = useState(null);
-
-  const { supabase } = useSupabase();
 
   useEffect(() => {
     supabase
@@ -57,33 +58,18 @@ const Header = ({
 
   requestViewer && getProfile(requestViewer);
 
-  const Button = ({ label, action, children }) => {
-    return (
-      <div className="ml-5 inline-flex">
-        {children}
-        <button
-          type="button"
-          onClick={action}
-          className="text-gray-500 text-md"
-        >
-          {label}
-        </button>
-      </div>
-    );
-  };
-
   return (
     <>
       <Modal
         warningTitle="Eliminar"
         warningDescription="Esta acción eliminará definitivamente está solicitud. ¿Deseas continuar?"
-        textColor="text-red-500"
         open={openModalDelete}
         setOpen={setOpenModalDelete}
         buttonLabel="Eliminar"
         requestId={requestId}
-        requestStatus={requestStatus}
-        adminId={adminId}
+        requestStatus={status}
+        currentAdminId={currentAdminId}
+        requestViewer={requestViewer}
         action={"delete"}
         setRequestDeleted={setRequestDeleted}
         applicantUserId={applicantUserId}
@@ -96,8 +82,9 @@ const Header = ({
         setOpen={setOpenModalInProccess}
         buttonLabel="Poner en revisión"
         requestId={requestId}
-        requestStatus={requestStatus}
-        adminId={adminId}
+        requestStatus={status}
+        currentAdminId={currentAdminId}
+        requestViewer={requestViewer}
         action={"en revisión"}
         color={"indigo"}
       />
@@ -108,8 +95,9 @@ const Header = ({
         setOpen={setOpenModalPost}
         buttonLabel="Publicar"
         requestId={requestId}
-        requestStatus={requestStatus}
-        adminId={adminId}
+        requestStatus={status}
+        currentAdminId={currentAdminId}
+        requestViewer={requestViewer}
         action={"admitida"}
         color={"indigo"}
       />
@@ -120,25 +108,11 @@ const Header = ({
               <h3 className="text-lg font-semibold leading-6 text-gray-900 mb-2">
                 Solicitud de Ingreso de Comercio
               </h3>
-              <p className="ml-1 max-w-2xl text-sm leading-6 text-gray-500">
-                <span
-                  className={classNames(
-                    "inline-flex items-center rounded-full px-2 py-1 text-xs font-medium  ring-1 ring-inset",
-                    realtimeStatus === "En revisión" ||
-                      requestStatus === "En revisión"
-                      ? "bg-yellow-50 text-yellow-600 ring-yellow-600/20"
-                      : realtimeStatus === "Admitida" ||
-                        requestStatus === "Admitida"
-                      ? "bg-green-50 text-green-600 ring-green-600/20"
-                      : realtimeStatus === "Por revisar" ||
-                        requestStatus === "Por revisar"
-                      ? "bg-gray-50 text-gray-600 ring-gray-600/20"
-                      : null
-                  )}
-                >
-                  {realtimeStatus ? realtimeStatus : requestStatus}
-                </span>
-              </p>
+              <div className="ml-1 max-w-2xl text-sm leading-6 text-gray-500">
+                <UtilsBARStatus
+                  status={realtimeStatus ? realtimeStatus : status}
+                />
+              </div>
             </div>
             <div className="flex">
               <RocketLaunchIcon className="text-gray-400 w-4 h-4 mt-1.5 mr-1" />
@@ -168,7 +142,7 @@ const Header = ({
               <div className="flex">
                 <ClipboardDocumentCheckIcon className="text-gray-400 w-4 h-4 mt-1.5 mr-1" />
                 <p className="text-gray-500 text-sm mt-1">
-                  {requestStatus} por
+                  {status} por
                   <span className="text-gray-500 font-medium">
                     {" "}
                     {requestViewerFullName}
@@ -182,21 +156,19 @@ const Header = ({
             <Button label="Eliminar" action={() => setOpenModalDelete(true)}>
               <TrashIcon className="text-red-500 hover:text-red-600 w-5 inline-flex" />
             </Button>
-            {requestStatus !== "En revisión" &&
-              requestStatus !== "Admitida" && (
-                <Button
-                  label="Poner en revisión"
-                  action={() => setOpenModalInProccess(true)}
-                >
-                  <ClipboardDocumentListIcon className="text-yellow-500 hover:text-yellow-600 w-5 inline-flex mr-1" />
-                </Button>
-              )}
-            {requestStatus !== "Admitida" &&
-              businessAdminUpdatedAt !== createdAt && (
-                <Button label="Admitir" action={() => setOpenModalPost(true)}>
-                  <CheckIcon className="text-green-600 hover:text-green-600 w-5 inline-flex" />
-                </Button>
-              )}
+            {status !== "En revisión" && status !== "Admitida" && (
+              <Button
+                label="Poner en revisión"
+                action={() => setOpenModalInProccess(true)}
+              >
+                <ClipboardDocumentListIcon className="text-yellow-500 hover:text-yellow-600 w-5 inline-flex mr-1" />
+              </Button>
+            )}
+            {status !== "Admitida" && businessAdminUpdatedAt !== createdAt && (
+              <Button label="Admitir" action={() => setOpenModalPost(true)}>
+                <CheckIcon className="text-green-600 hover:text-green-600 w-5 inline-flex" />
+              </Button>
+            )}
           </div>
         </div>
       </div>
@@ -204,4 +176,4 @@ const Header = ({
   );
 };
 
-export default Header;
+export default Heading;

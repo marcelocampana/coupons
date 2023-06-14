@@ -14,7 +14,7 @@ const Modal = ({
   setOpen,
   buttonLabel,
   requestId,
-  adminId,
+  currentAdminId,
   action,
   applicantUserId,
   color,
@@ -23,23 +23,23 @@ const Modal = ({
   const { supabase } = useSupabase();
   const router = useRouter();
 
-  const updateRequestStatus = async (requestId, newStatus, adminId) => {
+  const updateRequestStatus = async (requestId, newStatus, currentAdminId) => {
     let updateData = {};
     if (newStatus === "En revisión") {
       updateData = {
         request_status: newStatus,
-        request_viewer: adminId,
+        request_viewer: currentAdminId,
         updated_at: new Date(),
         admin_updated_at: new Date(),
       };
     } else if (newStatus === "Admitida") {
       updateData = {
         request_status: newStatus,
-        request_viewer: adminId,
+        request_viewer: currentAdminId,
         updated_at: new Date(),
         admin_updated_at: new Date(),
         request_approved_at: new Date(),
-        request_approved_by: adminId,
+        request_approved_by: currentAdminId,
       };
     }
 
@@ -53,7 +53,6 @@ const Modal = ({
 
   const deleteRequest = async (requestId) => {
     if (applicantUserId) {
-      console.log(applicantUserId);
       await supabase
         .from("business_admission_requests")
         .delete()
@@ -67,11 +66,11 @@ const Modal = ({
 
   const handleRequest = async (requestAction) => {
     if (requestAction === "en revisión") {
-      updateRequestStatus(requestId, "En revisión", adminId);
+      updateRequestStatus(requestId, "En revisión", currentAdminId);
     } else if (requestAction === "delete") {
       deleteRequest(requestId);
     } else if (requestAction === "admitida") {
-      updateRequestStatus(requestId, "Admitida", adminId);
+      updateRequestStatus(requestId, "Admitida", currentAdminId);
     }
     setOpen(false);
   };

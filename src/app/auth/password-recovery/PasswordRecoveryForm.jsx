@@ -18,7 +18,6 @@ const PasswordRecoveryForm = () => {
 
     const apiAuth = new Auth();
     const auth = await apiAuth.passwordRecovery({ email });
-    console.log(auth);
     setSendMessage(true);
     setLoading(false);
   };

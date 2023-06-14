@@ -14,7 +14,6 @@ export class Auth {
       body: JSON.stringify(body),
     });
     const result = await response.json();
-    console.log(result);
     return result;
   };
 
@@ -27,7 +26,7 @@ export class Auth {
       body: JSON.stringify(body),
     });
     const result = await response.json();
-    console.log(result);
+
     return result;
   };
 
@@ -40,7 +39,6 @@ export class Auth {
       body: JSON.stringify(body),
     });
     const result = await response.json();
-    console.log(result);
     return result;
   };
 
@@ -53,7 +51,6 @@ export class Auth {
       body: JSON.stringify(body),
     });
     const result = await response.json();
-    console.log(result);
     return result;
   };
 }
