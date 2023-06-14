@@ -191,11 +191,12 @@ const Header = ({
                   <ClipboardDocumentListIcon className="text-yellow-500 hover:text-yellow-600 w-5 inline-flex mr-1" />
                 </Button>
               )}
-            {requestStatus !== "Admitida" && (
-              <Button label="Admitir" action={() => setOpenModalPost(true)}>
-                <CheckIcon className="text-green-600 hover:text-green-600 w-5 inline-flex" />
-              </Button>
-            )}
+            {requestStatus !== "Admitida" &&
+              businessAdminUpdatedAt !== createdAt && (
+                <Button label="Admitir" action={() => setOpenModalPost(true)}>
+                  <CheckIcon className="text-green-600 hover:text-green-600 w-5 inline-flex" />
+                </Button>
+              )}
           </div>
         </div>
       </div>

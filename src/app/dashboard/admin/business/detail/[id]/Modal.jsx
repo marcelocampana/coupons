@@ -60,12 +60,7 @@ const Modal = ({
         .eq("business_admission_request_id", requestId);
 
       const result = await deleteUser(applicantUserId);
-      console.log("result", result);
-
-      // if (result) {
-      //   router.push("/dashboard/admin/business/confirm-delete");
-      // }
-
+      result && router.push("/dashboard/admin/business/confirm-delete");
       setOpen(false);
     }
   };

@@ -227,7 +227,6 @@ const NewBusiness = () => {
           await handleInsert(dataInsert);
           setTimeout(() => {
             setSubmitting(false);
-            setLoading(false);
           }, 400);
         }}
       >
@@ -373,7 +372,7 @@ const NewBusiness = () => {
           <FormButton
             label="Inscribir Comercio"
             loading={loading}
-            textLoading="Enviando..."
+            textLoading="Inscribiendo..."
           />
         </Form>
       </Formik>
