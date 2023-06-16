@@ -29,7 +29,7 @@ const Heading = ({
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [openModalInProccess, setOpenModalInProccess] = useState(false);
   const [openModalPost, setOpenModalPost] = useState(false);
-  const [requestDeleted, setRequestDeleted] = useState(false);
+  //const [requestDeleted, setRequestDeleted] = useState(false);
   const [requestViewerFullName, setRequestViewerFullName] = useState(null);
   const [realtimeStatus, setRealtimeStatus] = useState(null);
 
@@ -71,7 +71,7 @@ const Heading = ({
         currentAdminId={currentAdminId}
         requestViewer={requestViewer}
         action={"delete"}
-        setRequestDeleted={setRequestDeleted}
+        //  setRequestDeleted={setRequestDeleted}
         applicantUserId={applicantUserId}
         color={"red"}
       />
