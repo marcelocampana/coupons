@@ -1,8 +1,8 @@
 import "./globals.css";
-import { Inter } from "next/font/google";
+import { PT_Sans } from "next/font/google";
 import SupabaseProvider from "./supabase-provider";
 
-const inter = Inter({ subsets: ["latin"] });
+const ptSans = PT_Sans({ subsets: ["latin"], weight: ["400", "700"] });
 
 export const metadata = {
   title: "Create Next App",
@@ -12,7 +12,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className="bg-white">
-      <body className={inter.className}>
+      <body className={ptSans.className}>
         <SupabaseProvider>{children}</SupabaseProvider>
       </body>
     </html>

@@ -58,7 +58,7 @@ const Modal = ({
         .delete()
         .eq("business_admission_request_id", requestId);
 
-      const pathImages = [`${requestId}/cover.png`, `${requestId}/logo.png`];
+      const pathImages = [`${requestId}/cover`, `${requestId}/logo`];
 
       const { data, error } = await supabase.storage
         .from("business_images")

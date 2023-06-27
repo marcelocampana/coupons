@@ -97,6 +97,8 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
     const { business_logo_url, business_cover_url, ...dataToFinalUpdate } =
       dataToUpdate;
 
+    console.log(business_logo_url);
+
     const logoImageURL =
       typeof business_logo_url !== "string"
         ? await handleImageUpload(business_logo_url, "logo")
