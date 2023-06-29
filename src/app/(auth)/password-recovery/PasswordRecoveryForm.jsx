@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useSupabase } from "@/app/supabase-provider";
 import { Auth } from "@/services/Auth";
 import { useRouter } from "next/navigation";
 import { Formik, Form, Field } from "formik";
@@ -13,11 +14,17 @@ const PasswordRecoveryForm = () => {
   const [loading, setLoading] = useState(false);
   const [sendMessage, setSendMessage] = useState(false);
 
+  const { supabase } = useSupabase();
+
   const handlePasswordRecovery = async (values) => {
+    console.log("hola");
     const { email } = values;
 
-    const apiAuth = new Auth();
-    const auth = await apiAuth.passwordRecovery({ email });
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: "http://localhost:3000/password-reset",
+    });
+    console.log(data, error);
+
     setSendMessage(true);
     setLoading(false);
   };

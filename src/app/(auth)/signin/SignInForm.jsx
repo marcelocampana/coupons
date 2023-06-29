@@ -109,7 +109,7 @@ const SignInForm = () => {
               <div>
                 <div className="text-sm leading-6 mb-3 text-right">
                   <a
-                    href="/auth/password-recovery"
+                    href="/password-recovery"
                     className="font-semibold text-indigo-600 hover:text-indigo-500"
                   >
                     ¿Olvidaste la contraseña?
