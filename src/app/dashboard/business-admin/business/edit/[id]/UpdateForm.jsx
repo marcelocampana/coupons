@@ -22,6 +22,7 @@ import Textarea from "@/app/components/FormTextarea";
 import UtilsSuccessNotification from "@/app/components/UtilsSuccessNotification";
 import { useRouter } from "next/navigation";
 import UtilsSpinner from "@/app/components/UtilsSpinner";
+import UtilsBARStatus from "@/app/components/UtilsBARStatus";
 
 const UpdateForm = ({ businessAdmissionRequestsData }) => {
   const router = useRouter();
@@ -54,6 +55,7 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
     business_facebook,
     business_instagram,
     business_whatsapp,
+    request_status,
   } = businessAdmissionRequestsData[0];
 
   const handleImageUpload = async (imageValues, newImageName) => {
@@ -297,8 +299,14 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
 
   return (
     <WebWidth>
-      <WebHeading title="Datos del comercio" />
-      <div className="text-sm text-gray-600 mt-1">Estado: En revisión</div>
+      <div className="flex">
+        <WebHeading title="Datos del comercio" />
+        <div className="text-sm text-gray-600 mt-1">
+          <div className="mt-1.5 ml-1">
+            <UtilsBARStatus status={request_status} />
+          </div>
+        </div>
+      </div>
       <UtilsSuccessNotification
         show={show}
         setShow={setShow}
