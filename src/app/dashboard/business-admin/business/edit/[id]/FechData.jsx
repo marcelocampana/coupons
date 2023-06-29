@@ -2,6 +2,8 @@ import { BusinessAdmissionRequest } from "@/services";
 import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { headers, cookies } from "next/headers";
 import UpdateForm from "./UpdateForm";
+import { redirect } from "next/navigation";
+import Forbidden from "@/app/components/AdminForbidden";
 
 const FechData = async ({ req }) => {
   const supabase = createServerComponentSupabaseClient({
@@ -14,8 +16,17 @@ const FechData = async ({ req }) => {
     req.params.id
   );
 
+  console.log(businessAdmissionRequestsData[0].request_status);
   return (
-    <UpdateForm businessAdmissionRequestsData={businessAdmissionRequestsData} />
+    <>
+      {businessAdmissionRequestsData[0].request_status === "Admitida" ? (
+        <Forbidden />
+      ) : (
+        <UpdateForm
+          businessAdmissionRequestsData={businessAdmissionRequestsData}
+        />
+      )}
+    </>
   );
 };
 

@@ -9,6 +9,7 @@ const RequestAdmissionEdit = async (req) => {
     headers,
     cookies,
   });
+  console.log("req", req);
 
   const { data: currentUser } = await supabase.auth.getUser();
 

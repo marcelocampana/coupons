@@ -20,8 +20,11 @@ import { BusinessAdmissionRequest } from "@/services";
 import InputAddon from "@/app/components/FormInputAddon";
 import Textarea from "@/app/components/FormTextarea";
 import UtilsSuccessNotification from "@/app/components/UtilsSuccessNotification";
+import { useRouter } from "next/navigation";
+import UtilsSpinner from "@/app/components/UtilsSpinner";
 
 const UpdateForm = ({ businessAdmissionRequestsData }) => {
+  const router = useRouter();
   const { supabase } = useSupabase();
 
   const [show, setShow] = useState(false);
@@ -129,6 +132,11 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
       if (data) {
         console.log(data);
         setShow(true);
+        setTimeout(() => {
+          router.push(
+            `dashboard/business-admin/business/detail/${business_admission_request_id}`
+          );
+        }, 2500);
       } else {
         throw new Error("Error al actualizar el registro del comercio.");
       }
@@ -294,7 +302,8 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
       <UtilsSuccessNotification
         show={show}
         setShow={setShow}
-        text="Registro actualizado exitosamente"
+        text={`Registro actualizado exitosamente. Redireccionando...`}
+        spinner={true}
       />
 
       <Formik

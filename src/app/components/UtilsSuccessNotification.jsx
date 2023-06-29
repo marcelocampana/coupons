@@ -2,8 +2,14 @@ import { Fragment, useState } from "react";
 import { Transition } from "@headlessui/react";
 
 import { CheckCircleIcon, XMarkIcon } from "@heroicons/react/20/solid";
+import UtilsSpinner from "./UtilsSpinner";
 
-export default function UtilsSuccessNotification({ show, setShow, text }) {
+export default function UtilsSuccessNotification({
+  show,
+  setShow,
+  text,
+  spinner,
+}) {
   return (
     <>
       {/* Global notification live region, render this permanently at the end of the document */}
@@ -33,7 +39,10 @@ export default function UtilsSuccessNotification({ show, setShow, text }) {
                     />
                   </div>
                   <div className="ml-3 w-0 flex-1 pt-0.5">
-                    <p className="text-sm font-medium text-gray-900">{text}</p>
+                    <p className="text-sm font-medium text-gray-900">
+                      {text}
+                      {spinner && <UtilsSpinner />}
+                    </p>
                     <p className="mt-1 text-sm text-gray-500 hidden">
                       Anyone with a link can now view this file.
                     </p>
