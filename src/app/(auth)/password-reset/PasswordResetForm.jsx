@@ -7,8 +7,10 @@ import Input from "@/app/components/FormInput";
 import supabase from "@/connections/supabase";
 import UtilsErrorAlert from "@/app/components/UtilsErrorAlerts";
 import UtilsSuccessAlert from "@/app/components/UtilsSuccesAlert";
+import { useRouter } from "next/navigation";
 
 const PasswordResetForm = () => {
+  const router = useRouter();
   const [displaySuccessAlert, setDisplaySuccessAlert] = useState(false);
   const [displayErrorAlert, setDisplayErrorAlert] = useState(false);
 
@@ -30,6 +32,9 @@ const PasswordResetForm = () => {
       // Show success message or perform any other actions
 
       setDisplaySuccessAlert(true);
+      setTimeout(() => {
+        router.push("/dashboard");
+      }, 2500);
       //console.log("Password updated successfully!");
     }
 
@@ -78,14 +83,17 @@ const PasswordResetForm = () => {
               alt="Your Company"
             />
             <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-              Recuperación de contraseña
+              Cambio de contraseña
             </h2>
           </div>
 
           <div className="mt-5 sm:mx-auto sm:w-full sm:max-w-sm">
             <div className="mb-5">
               {displaySuccessAlert && (
-                <UtilsSuccessAlert text="La contraseña se actualizó correctamente" />
+                <UtilsSuccessAlert
+                  text="La contraseña se actualizó correctamente. Redireccionando al home"
+                  spinner={true}
+                />
               )}
 
               {displayErrorAlert && (
