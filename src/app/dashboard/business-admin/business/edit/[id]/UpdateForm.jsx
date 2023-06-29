@@ -32,6 +32,7 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
     business_display_name,
     business_email,
     business_main_phone,
+    business_secondary_phone,
     business_address,
     business_commune,
     business_city,
@@ -140,6 +141,7 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
     business_display_name,
     business_email,
     business_main_phone,
+    business_secondary_phone,
     business_address,
     business_commune,
     business_city,
@@ -193,6 +195,9 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
       .typeError("Debe incluir solo números")
       .min(100000000, "Debe incluir al menos 9 dígitos")
       .required("Requerido"),
+    business_secondary_phone: Yup.number()
+      .typeError("Debe incluir solo números")
+      .min(100000000, "Debe incluir al menos 9 dígitos"),
     business_address: Yup.string().required("Requerido"),
     business_commune: Yup.string().required("Requerido"),
     business_city: Yup.string().required("Requerido"),
@@ -370,12 +375,18 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
                 label="Teléfono principal"
               />
               <Field
+                as={InputPhone}
+                name="business_secondary_phone"
+                type="text"
+                label="Teléfono secundario"
+              />
+              <Field
                 name="business_address"
                 type="text"
                 as={Input}
                 label="Dirección"
               />
-              <Field
+              {/* <Field
                 as={Select}
                 name="business_commune"
                 type="text"
@@ -386,13 +397,20 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
                   { value: "Vitacura", label: "Vitacura" },
                 ]}
                 note="Tu comercio debe ubicarse en una de estas comunas"
+              /> */}
+              <Field
+                name="business_commune"
+                type="text"
+                as={Input}
+                label="Comuna"
+                // readOnly
               />
               <Field
                 name="business_city"
                 type="text"
                 as={Input}
                 label="Ciudad"
-                readOnly
+                // readOnly
               />
             </GridForm>
 

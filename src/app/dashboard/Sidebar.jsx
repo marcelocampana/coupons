@@ -64,13 +64,13 @@ export default async function Sidebar({ children }) {
       current: true,
       role: "business-admin",
     },
-    {
-      name: "Mi perfil",
-      href: "#",
-      icon: UsersIcon,
-      current: false,
-      role: "business-admin",
-    },
+    // {
+    //   name: "Mi perfil",
+    //   href: "#",
+    //   icon: UsersIcon,
+    //   current: false,
+    //   role: "business-admin",
+    // },
   ];
 
   return (

@@ -13,7 +13,7 @@ const RequestAdmissionEdit = async (req) => {
   const { data: currentUser } = await supabase.auth.getUser();
 
   if (currentUser.user === null) {
-    redirect("/auth/signin");
+    redirect("/signin");
   } else if (currentUser.user.user_metadata.role === "business-admin") {
     return <FechData req={req} />;
   } else {

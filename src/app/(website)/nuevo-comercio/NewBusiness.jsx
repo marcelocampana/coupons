@@ -78,7 +78,7 @@ const NewBusiness = () => {
         });
 
         if (data) {
-          router.push("/website/success-business-record");
+          router.push("/success-business-record");
         } else {
           throw new Error("Error al insertar el registro del comercio.");
         }
@@ -94,7 +94,7 @@ const NewBusiness = () => {
     business_main_phone: "",
     business_address: "",
     business_commune: "",
-    business_city: "Santiago",
+    business_city: "",
     business_legal_name: "",
     business_rut: "",
     legal_representative_firstname: "",
@@ -265,7 +265,7 @@ const NewBusiness = () => {
               as={Input}
               label="Dirección"
             />
-            <Field
+            {/* <Field
               as={Select}
               name="business_commune"
               type="text"
@@ -276,13 +276,19 @@ const NewBusiness = () => {
                 { value: "Vitacura", label: "Vitacura" },
               ]}
               note="Tu comercio debe ubicarse en una de estas comunas"
+            /> */}
+            <Field
+              name="business_commune"
+              type="text"
+              as={Input}
+              label="Comuna"
             />
             <Field
               name="business_city"
               type="text"
               as={Input}
               label="Ciudad"
-              readOnly
+              // readOnly
             />
           </GridForm>
 

@@ -62,7 +62,7 @@ const Heading = ({
     <>
       <Modal
         warningTitle="Eliminar"
-        warningDescription="Esta acción eliminará definitivamente está solicitud. ¿Deseas continuar?"
+        warningDescription="Esta acción eliminará definitivamente está solicitud de registro y la cuenta del usuario que la creó. ¿Deseas continuar?"
         open={openModalDelete}
         setOpen={setOpenModalDelete}
         buttonLabel="Eliminar"
@@ -90,10 +90,10 @@ const Heading = ({
       />
       <Modal
         warningTitle="Admitir registro"
-        warningDescription="Esta acción admitirá este comercio para mas adelante ser publicado. ¿Deseas continuar?"
+        warningDescription="Esta acción admitirá este registro comercio para mas adelante poder ser publicado. ¿Deseas continuar?"
         open={openModalPost}
         setOpen={setOpenModalPost}
-        buttonLabel="Publicar"
+        buttonLabel="Admitir registro"
         requestId={requestId}
         requestStatus={status}
         currentAdminId={currentAdminId}

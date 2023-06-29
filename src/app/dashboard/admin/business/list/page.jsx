@@ -7,7 +7,7 @@ const RequestListPage = async () => {
   const currentUser = await serverAuth.getCurrentUser();
 
   if (currentUser.user === null) {
-    redirect("/auth/signin");
+    redirect("/signin");
   } else {
     console.log("currentUser", currentUser.user.user_metadata.role);
   }
