@@ -10,6 +10,13 @@ const SignupConfirm = () => {
         ```
       */}
       <main className="grid min-h-full place-items-center bg-white px-6 py-24 sm:py-32 lg:px-8">
+        <div className="sm:mx-auto sm:w-full sm:max-w-sm">
+          <img
+            className="mx-auto h-10 w-auto"
+            src="/logo.png"
+            alt="Your Company"
+          />
+        </div>
         <div className="text-center">
           <p className="text-base font-semibold text-indigo-600"></p>
           <h1 className="mt-4 text-3xl font-bold tracking-tight text-gray-900 sm:text-3xl">
