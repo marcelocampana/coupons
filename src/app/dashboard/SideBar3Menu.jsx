@@ -4,7 +4,7 @@ import { Bars3Icon } from "@heroicons/react/24/outline";
 
 export default function SideBar3Menu() {
   return (
-    <div className="sticky top-0 z-40 flex items-center gap-x-6 bg-indigo-600 px-4 py-4 shadow-sm sm:px-6 lg:hidden">
+    <div className="sticky top-0 z-40 flex items-center gap-x-6 bg-custom-fuchsia-07e px-4 py-4 shadow-sm sm:px-6 lg:hidden">
       <button
         type="button"
         className="-m-2.5 p-2.5 text-indigo-200 lg:hidden"

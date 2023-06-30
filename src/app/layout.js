@@ -10,9 +10,10 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  //body className={ptSans.className}
   return (
     <html lang="en" className="bg-white">
-      <body className={ptSans.className}>
+      <body>
         <SupabaseProvider>{children}</SupabaseProvider>
       </body>
     </html>

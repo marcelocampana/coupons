@@ -128,7 +128,7 @@ const RequestList = async () => {
                   <td className="relative py-4 pl-3 text-right text-sm font-medium">
                     <a
                       href={`/dashboard/admin/business/detail/${request.business_admission_request_id}`}
-                      className="text-indigo-600 hover:text-indigo-900"
+                      className="text-custom-fuchsia-07e hover:text-pink-600"
                     >
                       {request.request_status === "Admitida"
                         ? "Ver"

@@ -89,7 +89,7 @@ export default async function Sidebar({ children }) {
         {/* Static sidebar for desktop */}
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
           {/* Sidebar component, swap this element with another sidebar if you like */}
-          <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-600 px-6">
+          <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-custom-fuchsia-07e px-6">
             <div className="flex h-16 shrink-0 items-center">
               <img className="h-10 w-auto" src="/logo.png" alt="Your Company" />
             </div>
@@ -105,7 +105,7 @@ export default async function Sidebar({ children }) {
                             className={classNames(
                               item.current
                                 ? "bg-indigo-700 text-white"
-                                : "text-indigo-200 hover:text-white hover:bg-indigo-700",
+                                : "text-white  hover:text-gray-100 hover:bg-indigo-700",
                               "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                             )}
                           >

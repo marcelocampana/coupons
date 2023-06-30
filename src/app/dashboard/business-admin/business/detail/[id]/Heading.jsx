@@ -28,7 +28,7 @@ const Heading = ({ businessAdmissionRequest }) => {
         <div className="mt-4 flex md:ml-4 md:mt-0">
           <a
             href={`/dashboard/business-admin/business/edit/${business_admission_request_id}`}
-            className="ml-3 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            className="ml-3 inline-flex items-center rounded-md bg-custom-fuchsia-07e px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-pink-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-custom-fuchsia-07e"
           >
             Editar
           </a>

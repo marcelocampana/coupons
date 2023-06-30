@@ -86,7 +86,7 @@ const Heading = ({
         currentAdminId={currentAdminId}
         requestViewer={requestViewer}
         action={"en revisión"}
-        color={"indigo"}
+        color={"pink"}
       />
       <Modal
         warningTitle="Admitir registro"
@@ -99,7 +99,7 @@ const Heading = ({
         currentAdminId={currentAdminId}
         requestViewer={requestViewer}
         action={"admitida"}
-        color={"indigo"}
+        color={"pink"}
       />
       <div className="pt-4 pb-3">
         <div className="-mt-4 flex flex-wrap items-center justify-between sm:flex-nowrap">
