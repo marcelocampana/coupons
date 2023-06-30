@@ -39,7 +39,7 @@ const Carousel = ({ images }) => {
           <ChevronRightIcon className="h-6 w-6" />
         </button>
       </div>
-      <div className="flex justify-center mt-2">
+      {/* <div className="flex justify-center mt-2">
         {images.map((_, index) => (
           <button
             key={index}
@@ -49,7 +49,7 @@ const Carousel = ({ images }) => {
             onClick={() => handleDotClick(index)}
           ></button>
         ))}
-      </div>
+      </div> */}
     </div>
   );
 };
