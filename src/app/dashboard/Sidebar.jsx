@@ -48,7 +48,7 @@ export default async function Sidebar({ children }) {
       href: "#",
       icon: HomeIcon,
       current: true,
-      role: "all",
+      role: "business-admin",
     },
     {
       name: "Solicitudes de ingreso",

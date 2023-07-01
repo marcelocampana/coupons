@@ -1,18 +1,14 @@
 "use client";
 
-import { useSearchParams, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const SignupConfirm = () => {
-  const pathname = useSearchParams();
+  //const pathname = useSearchParams();
   const router = useRouter();
-  const [urlParam, setUrlParam] = useState("");
 
-  useEffect(() => {
-    pathname.forEach((element) => {
-      router.push(element);
-    });
-  }, []);
+  setTimeout(() => {
+    router.push("/signin");
+  }, 3000);
 
   return (
     <>
@@ -32,19 +28,11 @@ const SignupConfirm = () => {
           </h1>
           <p className="mt-6 text-base leading-7 text-gray-600">
             Estás siendo redirigido al inicio de sesión...
+            <span
+              className="ml-1 inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite] text-green-500"
+              role="status"
+            ></span>
           </p>
-          <div className="mt-10 flex items-center justify-center gap-x-6">
-            <a
-              href={urlParam}
-              className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-            >
-              Ir al inicio de sesión
-            </a>
-            <a href="/" className="text-sm font-semibold text-indigo-900">
-              o continuar navegando en Chicupón
-              <span aria-hidden="true">&rarr;</span>
-            </a>
-          </div>
         </div>
       </main>
     </>

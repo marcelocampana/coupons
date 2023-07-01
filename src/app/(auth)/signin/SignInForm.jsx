@@ -31,10 +31,9 @@ const SignInForm = () => {
       if (user) {
         if (user.user_metadata.role === "business-admin") {
           router.push("/dashboard");
-        } else
-          router.push(
-            user.user_metadata.role === "end-user" ? "/" : "/dashboard"
-          );
+        } else if (user.user_metadata.role === "admin") {
+          router.push("/dashboard/admin/business/list");
+        } else router.push("/");
       }
     } catch (error) {
       error.message === "Invalid login credentials";
