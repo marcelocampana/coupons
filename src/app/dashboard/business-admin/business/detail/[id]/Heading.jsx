@@ -16,7 +16,6 @@ const Heading = ({ businessAdmissionRequest }) => {
             <UtilsBARStatus status={request_status} />
           </span>
         </h2>
-        <p>Completa tu solicitud haciendo click en el botón "Editar"</p>
 
         <div className="flex mt-1">
           <RocketLaunchIcon className="text-gray-400 w-4 h-4 mt-1.5 mr-1" />

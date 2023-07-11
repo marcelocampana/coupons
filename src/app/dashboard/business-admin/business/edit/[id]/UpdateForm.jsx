@@ -332,7 +332,7 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
       >
         {({ setFieldValue }) => (
           <Form className="my-6 space-y-2">
-            <GridForm cols="2" gapx="20">
+            <GridForm cols="2" gapx="12">
               <Field
                 as={Input}
                 name="business_display_name"
@@ -388,7 +388,7 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
               rows="4"
             />
             <UtilsDivider title="Contacto y ubicación del comercio" />
-            <GridForm cols="2">
+            <GridForm cols="2" gapx="12">
               <Field
                 as={InputPhone}
                 name="business_main_phone"
@@ -436,7 +436,7 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
             </GridForm>
 
             <UtilsDivider title="Datos del representante legal" />
-            <GridForm cols="2">
+            <GridForm cols="2" gapx="12">
               <Field
                 name="legal_representative_firstname"
                 type="text"
@@ -461,7 +461,7 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
               title="Cuenta de acceso del administrador del comercio"
               description="Crea tus credenciales para administrar el comercio"
             />
-            <GridForm cols="2">
+            <GridForm cols="2" gapx="12">
               <Field
                 name="admin_contact_firstname"
                 type="text"
@@ -484,7 +484,7 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
             <UtilsDivider />
 
             <UtilsDivider title="Canales digitales" />
-            <GridForm cols="2">
+            <GridForm cols="2" gapx="12">
               <Field
                 name="business_website"
                 as={InputAddon}

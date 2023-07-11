@@ -158,7 +158,7 @@ const Heading = ({
                 <TrashIcon className="text-red-500 hover:text-red-600 w-5 inline-flex mr-1" />
               </Button>
 
-              {status !== "En revisión" && status !== "Admitida" && (
+              {status !== "En revisión" && (
                 <Button
                   label="Poner en revisión"
                   action={() => setOpenModalInProccess(true)}
