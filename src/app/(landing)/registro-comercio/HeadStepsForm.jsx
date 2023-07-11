@@ -36,7 +36,7 @@ const HeadStepsForm = ({ form1, form2, form3, formStep }) => {
     : form1 || (form2 && (steps[2].state = "incoming"));
 
   return (
-    <div className="bg-yellow-50 py-6 my-6">
+    <div className="bg-yellow-50 py-6 my-6 hidden sm:block">
       <nav aria-label="Progress" className=" ml-24 mr-12">
         <ol role="list" className="flex items-center w-full">
           {steps.map((step, stepIdx) => (

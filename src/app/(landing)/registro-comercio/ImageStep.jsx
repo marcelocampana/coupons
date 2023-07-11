@@ -21,7 +21,10 @@ const ImageStep = () => {
         <h3 className="text-center mb-8 text-2xl text-gray-500 font-bold">
           Conoce Chicupón en 3 simples pasos
         </h3>
-        <ol role="list" className="space-y-4 md:flex md:space-x-8 md:space-y-0">
+        <ol
+          role="list"
+          className="hidden space-y-4 md:flex md:space-x-8 md:space-y-0"
+        >
           {steps.map((step) => (
             <li key={step.name} className="md:flex-1">
               <div
@@ -37,7 +40,7 @@ const ImageStep = () => {
         </ol>
       </nav>
 
-      <div className="grid grid-cols-3 gap-x-8">
+      <div className="gap-y-8 grid grid-flow-row sm:grid-cols-3 sm:gap-x-8">
         <img
           src="/images/newBusinessCarrousel/1.jpg"
           alt="chicupon bases"

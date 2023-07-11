@@ -19,7 +19,7 @@ const Header = () => {
           <span className="text-custom-fuchsia-07e"> Chicupón!</span>
         </h1>
         <div className="my-8 text-lg leading-8 text-gray-600">
-          <p className="px-32 text-xl">
+          <p className="text-xl">
             Atrae a nuevos clientes y aumenta tus ventas al publicar cupones de
             descuento <span className="text-gray-600">gratis*.</span>
           </p>
