@@ -1,5 +1,5 @@
 import { BARContext } from "@/app/context/BARContext";
-import classNames from "../../../helpers/classnames";
+import classNames from "@/app/helpers/classnames";
 import { CheckIcon } from "@heroicons/react/20/solid";
 import { useContext } from "react";
 

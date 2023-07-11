@@ -16,7 +16,7 @@ import {
   InputPhone,
 } from "@/app/components";
 import { ClientAuth, BusinessAdmissionRequest } from "@/services";
-import classNames from "../../../helpers/classnames";
+import classNames from "@/app/helpers/classnames";
 
 const Button = (props) => {
   return (
