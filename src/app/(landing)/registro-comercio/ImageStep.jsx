@@ -40,7 +40,7 @@ const ImageStep = () => {
         </ol>
       </nav>
 
-      <div className="gap-y-8 grid grid-flow-row sm:grid-cols-3 sm:gap-x-8">
+      <div className="gap-y-8 grid grid-flow-row md:grid-cols-3 md:gap-x-8">
         <img
           src="/images/newBusinessCarrousel/1.jpg"
           alt="chicupon bases"
