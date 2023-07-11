@@ -92,7 +92,7 @@ const FormStep3 = () => {
   };
 
   const initialValues = {
-    admin_contact_firstname: adminContactFirtname ? adminContactFirtname : "",
+    admin_contact_firstname: "",
     admin_contact_lastname: "",
     admin_contact_email: "",
     admin_contact_phone: "",
@@ -144,83 +144,71 @@ const FormStep3 = () => {
         }, 400);
       }}
     >
-      {({ setFieldValue }) => (
-        <Form className="my-6">
-          <UtilsDivider
-            title="Cuenta de acceso del administrador del comercio"
-            description="Crea tus credenciales para administrar el comercio"
+      <Form className="my-6">
+        <UtilsDivider
+          title="Cuenta de acceso del administrador del comercio"
+          description="Crea tus credenciales para administrar el comercio"
+        />
+        <GridForm cols="2" gapx="12">
+          <Field
+            name="admin_contact_firstname"
+            type="text"
+            as={Input}
+            label="Nombre"
           />
-          <GridForm cols="2" gapx="12">
-            <Field
-              name="admin_contact_firstname"
-              type="text"
-              as={Input}
-              label="Nombre"
-              onChange={(e) => {
-                // Update the field value
-                setFieldValue("admin_contact_firstname", e.target.value);
-                setAdminContactFirtname(e.target.value);
-              }}
+          <Field
+            name="admin_contact_lastname"
+            type="text"
+            as={Input}
+            label="Apellidos"
+          />
+          <Field
+            name="admin_contact_phone"
+            type="text"
+            as={InputPhone}
+            label="Teléfono"
+          />
+        </GridForm>
+        <div className="mb-5"></div>
+        <UtilsDivider />
+        <GridForm cols="2" gapx="12">
+          <Field
+            name="admin_contact_email"
+            type="email"
+            as={Input}
+            label="Email"
+            note="Este email será tu usuario de acceso"
+            autoComplete="username"
+          />
+        </GridForm>
+        <GridForm cols="2" gapx="12">
+          <Field
+            name="admin_contact_password"
+            type="password"
+            as={Input}
+            label="Crea una contraseña"
+            autoComplete="new-password"
+          />
+          <Field
+            name="admin_contact_confirm_password"
+            type="password"
+            as={Input}
+            label="Repite la contraseña"
+            autoComplete="new-password"
+          />
+        </GridForm>
+        <div className="mb-5"></div>
+        <UtilsDivider />
+        <div className="flex flex-row-reverse">
+          <div className="pt-3 ml-1.5">
+            <FormButton
+              label="Inscribir Comercio"
+              loading={loading}
+              textLoading="Inscribiendo..."
             />
-            <Field
-              name="admin_contact_lastname"
-              type="text"
-              as={Input}
-              label="Apellidos"
-              onChange={(e) => {
-                // Update the field value
-                setFieldValue("admin_contact_lastname", e.target.value);
-                setAdminContactLastname(e.target.value);
-              }}
-            />
-            <Field
-              name="admin_contact_phone"
-              type="text"
-              as={InputPhone}
-              label="Teléfono"
-            />
-          </GridForm>
-          <div className="mb-5"></div>
-          <UtilsDivider />
-          <GridForm cols="2" gapx="12">
-            <Field
-              name="admin_contact_email"
-              type="email"
-              as={Input}
-              label="Email"
-              note="Este email será tu usuario de acceso"
-              autoComplete="username"
-            />
-          </GridForm>
-          <GridForm cols="2" gapx="12">
-            <Field
-              name="admin_contact_password"
-              type="password"
-              as={Input}
-              label="Crea una contraseña"
-              autoComplete="new-password"
-            />
-            <Field
-              name="admin_contact_confirm_password"
-              type="password"
-              as={Input}
-              label="Repite la contraseña"
-              autoComplete="new-password"
-            />
-          </GridForm>
-          <div className="mb-5"></div>
-          <UtilsDivider />
-          <div className="flex flex-row-reverse">
-            <div className="pt-3 ml-1.5">
-              <FormButton
-                label="Inscribir Comercio"
-                loading={loading}
-                textLoading="Inscribiendo..."
-              />
-            </div>
           </div>
-        </Form>
-      )}
+        </div>
+      </Form>
     </Formik>
   );
 };
