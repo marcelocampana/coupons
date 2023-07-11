@@ -4,7 +4,7 @@ import { Fragment, useState } from "react";
 import { Dialog, Disclosure, Transition, Menu } from "@headlessui/react";
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import { ChevronDownIcon, PlusIcon } from "@heroicons/react/20/solid";
-import classNames from "@/helpers/classnames";
+import classNames from "../../../helpers/classnames";
 
 const sortOptions = [
   { name: "Más popular", href: "#", current: true },

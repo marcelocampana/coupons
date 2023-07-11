@@ -6,7 +6,7 @@ import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import Input from "../../components/FormInput";
 import UtilsSuccessAlert from "@/app/components/UtilsSuccesAlert";
-import classNames from "@/helpers/classnames";
+import classNames from "../../../helpers/classnames";
 
 const PasswordRecoveryForm = () => {
   const [loading, setLoading] = useState(false);

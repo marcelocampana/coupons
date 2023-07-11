@@ -7,7 +7,7 @@ import SideBar3Menu from "./SideBar3Menu";
 import navigation from "./navigation";
 import ProfileButton from "./ProfileButton";
 import Link from "next/link";
-import classNames from "@/helpers/classnames";
+import classNames from "../../helpers/classnames";
 
 const teams = [];
 
