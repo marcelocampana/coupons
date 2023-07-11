@@ -4,7 +4,6 @@ import FAQ from "./FAQ";
 import ImageStep from "./ImageStep";
 import Header from "./Header";
 import Background2 from "./Background2";
-import Button from "./Button";
 import CallToAction from "./CallToAction";
 
 const page = () => {
