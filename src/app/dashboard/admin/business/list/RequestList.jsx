@@ -1,9 +1,10 @@
 import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { headers, cookies } from "next/headers";
 import BusinessAdmissionRequest from "@/services/BusinessAdmissionRequest";
-import { classNames } from "@/helpers/classnames";
+
 import Profiles from "@/services/Profiles";
 import Link from "next/link";
+import classNames from "@/helpers/classnames";
 
 export const revalidate = 0;
 

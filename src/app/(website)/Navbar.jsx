@@ -159,10 +159,6 @@ const pages = [
   { name: "Comida", href: "#" },
 ];
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
-
 export default function Navbar() {
   const [open, setOpen] = useState(false);
 

@@ -5,12 +5,9 @@ import SidebarTransition from "./SidebarTransition";
 import ProfileButton from "./ProfileButton";
 import navigation from "./navigation";
 import Link from "next/link";
+import classNames from "@/helpers/classnames";
 
 const teams = [];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
 
 export default async function Sidebar({ children }) {
   const supabase = createServerComponentSupabaseClient({

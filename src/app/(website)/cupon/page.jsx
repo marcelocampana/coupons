@@ -18,6 +18,7 @@
 import { Fragment } from "react";
 import { StarIcon } from "@heroicons/react/20/solid";
 import { Tab } from "@headlessui/react";
+import classNames from "@/helpers/classnames";
 
 const product = {
   name: "Application UI Icon Pack",
@@ -107,10 +108,6 @@ const license = {
     </ul>
   `,
 };
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
 
 export default function Example() {
   return (

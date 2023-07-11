@@ -7,12 +7,9 @@ import SideBar3Menu from "./SideBar3Menu";
 import navigation from "./navigation";
 import ProfileButton from "./ProfileButton";
 import Link from "next/link";
+import classNames from "@/helpers/classnames";
 
 const teams = [];
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
 
 export default function SidebarTransition({
   businessAdmissionRequestId,

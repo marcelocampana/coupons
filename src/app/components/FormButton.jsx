@@ -1,4 +1,4 @@
-import { classNames } from "@/helpers/classnames";
+import classNames from "@/helpers/classnames";
 
 export default function FormButton({ loading, label, textLoading, mt }) {
   return (

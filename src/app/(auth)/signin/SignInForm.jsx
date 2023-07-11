@@ -5,11 +5,12 @@ import { useRouter } from "next/navigation";
 import { useSupabase } from "../../supabase-provider";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
-import { classNames } from "@/helpers/classnames";
+
 import ClientAuth from "@/services/ClientAuth";
 import UtilsErrorAlert from "../../components/UtilsErrorAlerts";
 import Input from "../../components/FormInput";
 import Link from "next/link";
+import classNames from "@/helpers/classnames";
 
 const SignInForm = () => {
   const { supabase } = useSupabase();

@@ -1,10 +1,7 @@
 import { BARContext } from "@/app/context/BARContext";
+import classNames from "@/helpers/classnames";
 import { CheckIcon } from "@heroicons/react/20/solid";
 import { useContext } from "react";
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
 
 const HeadStepsForm = ({ form1, form2, form3, formStep }) => {
   const { step1Value, step2Value, step3Value } = useContext(BARContext);

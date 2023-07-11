@@ -1,6 +1,6 @@
 //Business Admission Request status component
 
-import { classNames } from "@/helpers/classnames";
+import classNames from "@/helpers/classnames";
 
 const UtilsBARStatus = ({ status }) => {
   return (
