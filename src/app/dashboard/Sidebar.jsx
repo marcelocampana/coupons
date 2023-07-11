@@ -1,15 +1,10 @@
 import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { headers, cookies } from "next/headers";
 
-import {
-  BuildingOffice2Icon,
-  ClipboardDocumentCheckIcon,
-  HomeIcon,
-  UsersIcon,
-} from "@heroicons/react/24/outline";
 import SidebarTransition from "./SidebarTransition";
-import SideBar3Menu from "./SideBar3Menu";
 import ProfileButton from "./ProfileButton";
+import navigation from "./navigation";
+import Link from "next/link";
 
 const teams = [];
 
@@ -42,37 +37,6 @@ export default async function Sidebar({ children }) {
     }
   }
 
-  const navigation = [
-    {
-      name: "Inicio",
-      href: "#",
-      icon: HomeIcon,
-      current: true,
-      role: "business-admin",
-    },
-    {
-      name: "Solicitudes de ingreso",
-      href: "/dashboard/admin/business/list",
-      icon: ClipboardDocumentCheckIcon,
-      current: false,
-      role: "admin",
-    },
-    {
-      name: "Mi registro",
-      href: `/dashboard/business-admin/business/detail/${businessAdmissionRequestId}`,
-      icon: BuildingOffice2Icon,
-      current: true,
-      role: "business-admin",
-    },
-    // {
-    //   name: "Mi perfil",
-    //   href: "#",
-    //   icon: UsersIcon,
-    //   current: false,
-    //   role: "business-admin",
-    // },
-  ];
-
   return (
     <>
       {/*
@@ -84,7 +48,7 @@ export default async function Sidebar({ children }) {
         ```
       */}
       <div>
-        <SidebarTransition />
+        {/* <SidebarTransition /> */}
 
         {/* Static sidebar for desktop */}
         <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
@@ -97,10 +61,10 @@ export default async function Sidebar({ children }) {
               <ul role="list" className="flex flex-1 flex-col gap-y-7">
                 <li>
                   <ul role="list" className="-mx-2 space-y-1">
-                    {navigation.map((item) =>
+                    {navigation(businessAdmissionRequestId).map((item) =>
                       item.role === userRole || item.role === "all" ? (
                         <li key={item.name}>
-                          <a
+                          <Link
                             href={item.href}
                             className={classNames(
                               item.current
@@ -119,7 +83,7 @@ export default async function Sidebar({ children }) {
                               aria-hidden="true"
                             />
                             {item.name}
-                          </a>
+                          </Link>
                         </li>
                       ) : null
                     )}
@@ -158,7 +122,11 @@ export default async function Sidebar({ children }) {
           </div>
         </div>
 
-        <SideBar3Menu />
+        {/* <SideBar3Menu setSidebarOpen={true} /> */}
+        <SidebarTransition
+          businessAdmissionRequestId={businessAdmissionRequestId}
+          userRole={userRole}
+        />
 
         <main className="py-10 lg:pl-72">
           <div className="px-4 sm:px-6 lg:px-8">{children}</div>

@@ -2,7 +2,6 @@ import { BusinessAdmissionRequest } from "@/services";
 import { createServerComponentSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { headers, cookies } from "next/headers";
 import UpdateForm from "./UpdateForm";
-import { redirect } from "next/navigation";
 import Forbidden from "@/app/components/AdminForbidden";
 
 const FechData = async ({ req }) => {

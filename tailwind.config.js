@@ -46,6 +46,8 @@ module.exports = {
         "text-pink-500",
         "text-pink-600",
         "bg-pink-100",
+        "gap-x-12",
+        "grid-cols-4",
       ],
     },
   },

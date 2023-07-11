@@ -26,10 +26,13 @@ class SupabaseClient {
   }
 
   async getRecordByColumnValue(columnName, columnValue) {
+    console.log(columnName, columnValue);
     const { data, error } = await this.supabase
       .from(this.tableName)
       .select("*")
       .eq(columnName, columnValue);
+
+    console.log("data", data, error);
 
     if (error) {
       throw new Error(error.message);

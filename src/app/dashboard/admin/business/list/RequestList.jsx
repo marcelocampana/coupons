@@ -3,6 +3,7 @@ import { headers, cookies } from "next/headers";
 import BusinessAdmissionRequest from "@/services/BusinessAdmissionRequest";
 import { classNames } from "@/helpers/classnames";
 import Profiles from "@/services/Profiles";
+import Link from "next/link";
 
 export const revalidate = 0;
 
@@ -67,13 +68,13 @@ const RequestList = async () => {
                   scope="col"
                   className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                 >
-                  Fecha de registro
+                  Ingreso
                 </th>
                 <th
                   scope="col"
                   className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                 >
-                  Estado de solicitud
+                  Estado
                 </th>
                 <th
                   scope="col"
@@ -90,7 +91,12 @@ const RequestList = async () => {
               {businessAdmissionRequests.map((request, i) => (
                 <tr key={i}>
                   <td className="relative py-4 pr-3 text-sm font-medium text-gray-900">
-                    {request.business_display_name}
+                    <Link
+                      href={`/dashboard/admin/business/detail/${request.business_admission_request_id}`}
+                      className="hover:text-custom-fuchsia-07e"
+                    >
+                      {request.business_display_name}
+                    </Link>
                     <div className="absolute bottom-0 right-full h-px w-screen bg-gray-100" />
                     <div className="absolute bottom-0 left-0 h-px w-screen bg-gray-100" />
                   </td>
@@ -126,7 +132,7 @@ const RequestList = async () => {
                       : "---"}
                   </td>
                   <td className="relative py-4 pl-3 text-right text-sm font-medium">
-                    <a
+                    <Link
                       href={`/dashboard/admin/business/detail/${request.business_admission_request_id}`}
                       className="text-custom-fuchsia-07e hover:text-pink-600"
                     >
@@ -136,7 +142,7 @@ const RequestList = async () => {
                       <span className="sr-only">
                         , {request.business_admission_request_id}
                       </span>
-                    </a>
+                    </Link>
                   </td>
                 </tr>
               ))}

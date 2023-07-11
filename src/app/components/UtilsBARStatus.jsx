@@ -4,7 +4,7 @@ import { classNames } from "@/helpers/classnames";
 
 const UtilsBARStatus = ({ status }) => {
   return (
-    <div
+    <span
       className={classNames(
         "inline-flex items-center rounded-full px-2 py-1 text-xs font-medium  ring-1 ring-inset",
         status === "En revisión"
@@ -16,9 +16,8 @@ const UtilsBARStatus = ({ status }) => {
           : null
       )}
     >
-      {" "}
       {status}
-    </div>
+    </span>
   );
 };
 

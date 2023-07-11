@@ -59,7 +59,7 @@ const InputImage = ({ label, note, name, setFieldValue, imageSize, dbUrl }) => {
           <div className="mt-4 flex text-sm leading-6 text-gray-600 justify-center">
             <label
               htmlFor={name}
-              className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 hover:text-indigo-500"
+              className="relative cursor-pointer rounded-md bg-white font-semibold text-custom-fuchsia-07e hover:text-indigo-500"
             >
               <span> Elige una imagen </span>
               <input

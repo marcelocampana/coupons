@@ -62,7 +62,7 @@ const Heading = ({
     <>
       <Modal
         warningTitle="Eliminar"
-        warningDescription="Esta acción eliminará definitivamente está solicitud de registro y la cuenta del usuario que la creó. ¿Deseas continuar?"
+        warningDescription="Esta acción eliminará definitivamente esta solicitud como la cuenta del usuario que la creó. ¿Deseas continuar?"
         open={openModalDelete}
         setOpen={setOpenModalDelete}
         buttonLabel="Eliminar"
@@ -77,7 +77,7 @@ const Heading = ({
       />
       <Modal
         warningTitle="En revisión"
-        warningDescription={`Esta acción marcará el estado de esta solicitud como "En revisión". ¿Deseas continuar?`}
+        warningDescription={`Esta acción marcará el estado de esta solicitud como "En revisión" y el comercio podrá continuar editándola. ¿Deseas continuar?`}
         open={openModalInProccess}
         setOpen={setOpenModalInProccess}
         buttonLabel="Poner en revisión"
@@ -90,10 +90,10 @@ const Heading = ({
       />
       <Modal
         warningTitle="Admitir registro"
-        warningDescription="Esta acción admitirá este registro comercio para mas adelante poder ser publicado. ¿Deseas continuar?"
+        warningDescription="Esta acción admitirá esta solicitud y no podrá ser editada por el comercio. ¿Deseas continuar?"
         open={openModalPost}
         setOpen={setOpenModalPost}
-        buttonLabel="Admitir registro"
+        buttonLabel="Admitir solicitud"
         requestId={requestId}
         requestStatus={status}
         currentAdminId={currentAdminId}
@@ -102,18 +102,18 @@ const Heading = ({
         color={"pink"}
       />
       <div className="pt-4 pb-3">
-        <div className="-mt-4 flex flex-wrap items-center justify-between sm:flex-nowrap">
+        <div>
+          <h3 className="text-lg font-semibold leading-6 text-gray-900 mb-2">
+            Solicitud de Ingreso de Comercio
+            <span className="ml-1">
+              <UtilsBARStatus
+                status={realtimeStatus ? realtimeStatus : status}
+              />
+            </span>
+          </h3>
+        </div>
+        <div className="lg:-mt-4 xl:flex flex-wrap items-center justify-between sm:flex-nowrap">
           <div className="mt-4">
-            <div className="flex">
-              <h3 className="text-lg font-semibold leading-6 text-gray-900 mb-2">
-                Solicitud de Ingreso de Comercio
-              </h3>
-              <div className="ml-1 max-w-2xl text-sm leading-6 text-gray-500">
-                <UtilsBARStatus
-                  status={realtimeStatus ? realtimeStatus : status}
-                />
-              </div>
-            </div>
             <div className="flex">
               <RocketLaunchIcon className="text-gray-400 w-4 h-4 mt-1.5 mr-1" />
               <p className="text-gray-500 text-sm mt-1">
@@ -124,8 +124,7 @@ const Heading = ({
               <div className="flex">
                 <ClockIcon className="text-gray-400 w-4 h-4 mt-1.5 mr-1" />
                 <p className="text-gray-500 text-sm mt-1">
-                  Última modificación del administrador el{" "}
-                  {formatDateHour(adminUpdatedAt)}
+                  Editada por admin el {formatDateHour(adminUpdatedAt)}
                 </p>
               </div>
             )}
@@ -133,7 +132,7 @@ const Heading = ({
               <div className="flex">
                 <ClockIcon className="text-gray-400 w-4 h-4 mt-1.5 mr-1" />
                 <p className="text-gray-500 text-sm mt-1">
-                  Última modificación por el comercio el{" "}
+                  Editada por comercio el{" "}
                   {formatDateHour(businessAdminUpdatedAt)}
                 </p>
               </div>
@@ -152,23 +151,28 @@ const Heading = ({
             )}
           </div>
 
-          <div className="ml-4 mt-4 flex-shrink-0">
-            <Button label="Eliminar" action={() => setOpenModalDelete(true)}>
-              <TrashIcon className="text-red-500 hover:text-red-600 w-5 inline-flex" />
-            </Button>
-            {status !== "En revisión" && status !== "Admitida" && (
-              <Button
-                label="Poner en revisión"
-                action={() => setOpenModalInProccess(true)}
-              >
-                <ClipboardDocumentListIcon className="text-yellow-500 hover:text-yellow-600 w-5 inline-flex mr-1" />
+          <div className="mt-4">
+            <div className="text-gray-400 text-sm mb-1">Opciones</div>
+            <div className="flex-shrink-0">
+              <Button label="Eliminar" action={() => setOpenModalDelete(true)}>
+                <TrashIcon className="text-red-500 hover:text-red-600 w-5 inline-flex mr-1" />
               </Button>
-            )}
-            {status !== "Admitida" && businessAdminUpdatedAt !== createdAt && (
-              <Button label="Admitir" action={() => setOpenModalPost(true)}>
-                <CheckIcon className="text-green-600 hover:text-green-600 w-5 inline-flex" />
-              </Button>
-            )}
+
+              {status !== "En revisión" && status !== "Admitida" && (
+                <Button
+                  label="Poner en revisión"
+                  action={() => setOpenModalInProccess(true)}
+                >
+                  <ClipboardDocumentListIcon className="text-yellow-500 hover:text-yellow-600 w-5 inline-flex mr-1" />
+                </Button>
+              )}
+              {status !== "Admitida" &&
+                businessAdminUpdatedAt !== createdAt && (
+                  <Button label="Admitir" action={() => setOpenModalPost(true)}>
+                    <CheckIcon className="text-green-600 hover:text-green-600 w-5 inline-flex" />
+                  </Button>
+                )}
+            </div>
           </div>
         </div>
       </div>

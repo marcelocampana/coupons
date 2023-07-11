@@ -299,14 +299,18 @@ const UpdateForm = ({ businessAdmissionRequestsData }) => {
 
   return (
     <WebWidth>
-      <div className="flex">
-        <WebHeading title="Datos del comercio" />
-        <div className="text-sm text-gray-600 mt-1">
-          <div className="mt-1.5 ml-1">
-            <UtilsBARStatus status={request_status} />
-          </div>
+      <WebHeading title="Editar datos del comercio" />
+      <div className="text-sm text-gray-600 mt-1">
+        <div className="mt-1.5 ml-1">
+          <p>
+            Estado de la solicitud
+            <span className="ml-1">
+              <UtilsBARStatus status={request_status} />
+            </span>
+          </p>
         </div>
       </div>
+
       <UtilsSuccessNotification
         show={show}
         setShow={setShow}

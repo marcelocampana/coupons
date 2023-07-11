@@ -17,10 +17,48 @@ import {
 } from "@/app/components";
 import { ClientAuth, BusinessAdmissionRequest } from "@/services";
 
+import { classNames } from "@/helpers/classnames";
+
+const Button = (props) => {
+  return (
+    <div className="text-right">
+      <button
+        {...props}
+        type="button"
+        className={classNames(
+          "rounded py-2 px-4 text-sm font-semibold text-white bg-gray-400 hover:bg-pink-600 shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-custom-purple-282 mt-5",
+          props.label === "Continuar" ? "bg-gray-500" : "bg-gray-400"
+        )}
+      >
+        {props.label}
+      </button>
+    </div>
+  );
+};
+
 const NewBusiness = () => {
   const { supabase } = useSupabase();
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const [formStart, setFormStart] = useState(true);
+  const [formMiddle, setFormMiddle] = useState(false);
+  const [formEnd, setFormEnd] = useState(false);
+
+  const formStep = (target) => {
+    if (target === "middle") {
+      setFormStart(false);
+      setFormMiddle(true);
+      setFormEnd(false);
+    } else if (target === "end") {
+      setFormStart(false);
+      setFormMiddle(false);
+      setFormEnd(true);
+    } else if (target === "start") {
+      setFormStart(true);
+      setFormMiddle(false);
+      setFormEnd(false);
+    }
+  };
 
   const checkIfValueExistsInDatabase = async (
     valueToValidate,
@@ -209,10 +247,9 @@ const NewBusiness = () => {
 
   return (
     <WebWidth>
-      <WebHeading
-        title="Hola 👋 Registremos tu comercio"
-        paragraph="Para comenzar, cuéntanos acerca de el"
-      />
+      <WebHeading title="Hola 👋 registremos tu comercio " />
+      {/* Hola 👋 Registremos tu comercio */}
+
       <Formik
         initialValues={initialValues}
         validationSchema={validationSchema}
@@ -225,50 +262,52 @@ const NewBusiness = () => {
           }, 400);
         }}
       >
-        <Form className="my-6 space-y-2">
-          <GridForm cols="2" gapx="20">
-            <Field
-              as={Input}
-              name="business_display_name"
-              type="text"
-              label="Nombre del comercio"
-            />
-            <Field
-              as={Input}
-              name="business_email"
-              type="text"
-              label="Email del comercio"
-              note="Tus clientes te contactan aquí"
-            />
-            <Field
-              as={Input}
-              name="business_legal_name"
-              type="text"
-              label="Razón social"
-            />
-            <Field
-              as={Input}
-              name="business_rut"
-              type="text"
-              label="RUT del comercio"
-              note="Ej: 12345678-9"
-            />
-          </GridForm>
-          <UtilsDivider title="Contacto y ubicación del comercio" />
-          <GridForm cols="2">
-            <Field
-              as={InputPhone}
-              name="business_main_phone"
-              type="text"
-              label="Teléfono principal"
-            />
-            <Field
-              name="business_address"
-              type="text"
-              as={Input}
-              label="Dirección"
-            />
-            {/* <Field
+        <Form className="my-6">
+          {formStart && (
+            <>
+              <GridForm cols="2" gapx="12">
+                <Field
+                  as={Input}
+                  name="business_display_name"
+                  type="text"
+                  label="Nombre del comercio"
+                />
+                <Field
+                  as={Input}
+                  name="business_email"
+                  type="text"
+                  label="Email del comercio"
+                  note="Tus clientes te contactan aquí"
+                />
+                <Field
+                  as={Input}
+                  name="business_legal_name"
+                  type="text"
+                  label="Razón social"
+                />
+                <Field
+                  as={Input}
+                  name="business_rut"
+                  type="text"
+                  label="RUT del comercio"
+                  note="Ej: 12345678-9"
+                />
+              </GridForm>
+              <UtilsDivider title="Contacto y ubicación del comercio" />
+              <GridForm cols="2" gapx="12">
+                <Field
+                  as={InputPhone}
+                  name="business_main_phone"
+                  type="text"
+                  label="Teléfono principal"
+                />
+                <Field
+                  name="business_address"
+                  type="text"
+                  as={Input}
+                  label="Dirección"
+                />
+                {/* <Field
               as={Select}
               name="business_commune"
               type="text"
@@ -280,101 +319,123 @@ const NewBusiness = () => {
               ]}
               note="Tu comercio debe ubicarse en una de estas comunas"
             /> */}
-            <Field
-              name="business_commune"
-              type="text"
-              as={Input}
-              label="Comuna"
-            />
-            <Field
-              name="business_city"
-              type="text"
-              as={Input}
-              label="Ciudad"
-              // readOnly
-            />
-          </GridForm>
-
-          <UtilsDivider title="Datos del representante legal" />
-          <GridForm cols="2">
-            <Field
-              name="legal_representative_firstname"
-              type="text"
-              as={Input}
-              label="Nombres"
-            />
-            <Field
-              name="legal_representative_lastname"
-              type="text"
-              as={Input}
-              label="Apellidos"
-            />
-            <Field
-              name="legal_representative_rut"
-              type="text"
-              as={Input}
-              label="RUT"
-              note="Ej: 12345678-9"
-            />
-          </GridForm>
-          <UtilsDivider
-            title="Cuenta de acceso del administrador del comercio"
-            description="Crea tus credenciales para administrar el comercio"
-          />
-          <GridForm cols="2">
-            <Field
-              name="admin_contact_firstname"
-              type="text"
-              as={Input}
-              label="Nombre"
-            />
-            <Field
-              name="admin_contact_lastname"
-              type="text"
-              as={Input}
-              label="Apellidos"
-            />
-            <Field
-              name="admin_contact_phone"
-              type="text"
-              as={InputPhone}
-              label="Teléfono"
-            />
-          </GridForm>
-          <UtilsDivider />
-          <GridForm cols="2">
-            <Field
-              name="admin_contact_email"
-              type="email"
-              as={Input}
-              label="Email"
-              note="Este email será tu usuario de acceso"
-              autoComplete="username"
-            />
-          </GridForm>
-          <GridForm cols="2">
-            <Field
-              name="admin_contact_password"
-              type="password"
-              as={Input}
-              label="Crea una contraseña"
-              autoComplete="new-password"
-            />
-            <Field
-              name="admin_contact_confirm_password"
-              type="password"
-              as={Input}
-              label="Repite la contraseña"
-              autoComplete="new-password"
-            />
-          </GridForm>
-
-          <UtilsDivider />
-          <FormButton
-            label="Inscribir Comercio"
-            loading={loading}
-            textLoading="Inscribiendo..."
-          />
+                <Field
+                  name="business_commune"
+                  type="text"
+                  as={Input}
+                  label="Comuna"
+                />
+                <Field
+                  name="business_city"
+                  type="text"
+                  as={Input}
+                  label="Ciudad"
+                  // readOnly
+                />
+              </GridForm>
+              <Button onClick={() => formStep("middle")} label="Continuar" />
+            </>
+          )}
+          {formMiddle && (
+            <>
+              <UtilsDivider title="Datos del representante legal" />
+              <GridForm cols="2" gapx="12">
+                <Field
+                  name="legal_representative_firstname"
+                  type="text"
+                  as={Input}
+                  label="Nombres"
+                />
+                <Field
+                  name="legal_representative_lastname"
+                  type="text"
+                  as={Input}
+                  label="Apellidos"
+                />
+                <Field
+                  name="legal_representative_rut"
+                  type="text"
+                  as={Input}
+                  label="RUT"
+                  note="Ej: 12345678-9"
+                />
+              </GridForm>
+              <div className="w-1/3 ml-auto">
+                <GridForm cols="2" gapx="2">
+                  <Button onClick={() => formStep("start")} label="Atrás" />
+                  <Button onClick={() => formStep("end")} label="Continuar" />
+                </GridForm>
+              </div>
+            </>
+          )}
+          {formEnd && (
+            <>
+              <UtilsDivider
+                title="Cuenta de acceso del administrador del comercio"
+                description="Crea tus credenciales para administrar el comercio"
+              />
+              <GridForm cols="2" gapx="12">
+                <Field
+                  name="admin_contact_firstname"
+                  type="text"
+                  as={Input}
+                  label="Nombre"
+                />
+                <Field
+                  name="admin_contact_lastname"
+                  type="text"
+                  as={Input}
+                  label="Apellidos"
+                />
+                <Field
+                  name="admin_contact_phone"
+                  type="text"
+                  as={InputPhone}
+                  label="Teléfono"
+                />
+              </GridForm>
+              <div className="mb-5"></div>
+              <UtilsDivider />
+              <GridForm cols="2" gapx="12">
+                <Field
+                  name="admin_contact_email"
+                  type="email"
+                  as={Input}
+                  label="Email"
+                  note="Este email será tu usuario de acceso"
+                  autoComplete="username"
+                />
+              </GridForm>
+              <GridForm cols="2" gapx="12">
+                <Field
+                  name="admin_contact_password"
+                  type="password"
+                  as={Input}
+                  label="Crea una contraseña"
+                  autoComplete="new-password"
+                />
+                <Field
+                  name="admin_contact_confirm_password"
+                  type="password"
+                  as={Input}
+                  label="Repite la contraseña"
+                  autoComplete="new-password"
+                />
+              </GridForm>
+              <div className="mb-5"></div>
+              <UtilsDivider />
+              <div className="flex flex-row-reverse">
+                <div className="pt-3 ml-1.5">
+                  <FormButton
+                    label="Inscribir Comercio"
+                    loading={loading}
+                    textLoading="Inscribiendo..."
+                  />
+                </div>
+                <Button onClick={() => formStep("middle")} label="Atrás" />
+              </div>
+            </>
+          )}
         </Form>
       </Formik>
     </WebWidth>

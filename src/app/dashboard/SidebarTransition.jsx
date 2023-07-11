@@ -2,39 +2,25 @@
 
 import { Fragment, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import {
-  CalendarIcon,
-  ChartPieIcon,
-  DocumentDuplicateIcon,
-  FolderIcon,
-  HomeIcon,
-  UsersIcon,
-  XMarkIcon,
-} from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/outline";
+import SideBar3Menu from "./SideBar3Menu";
+import navigation from "./navigation";
+import ProfileButton from "./ProfileButton";
+import Link from "next/link";
 
-const navigation = [
-  { name: "Dashboard", href: "#", icon: HomeIcon, current: true },
-  { name: "Team", href: "#", icon: UsersIcon, current: false },
-  { name: "Projects", href: "#", icon: FolderIcon, current: false },
-  { name: "Calendar", href: "#", icon: CalendarIcon, current: false },
-  { name: "Documents", href: "#", icon: DocumentDuplicateIcon, current: false },
-  { name: "Reports", href: "#", icon: ChartPieIcon, current: false },
-];
-const teams = [
-  { id: 1, name: "Heroicons", href: "#", initial: "H", current: false },
-  { id: 2, name: "Tailwind Labs", href: "#", initial: "T", current: false },
-  { id: 3, name: "Workcation", href: "#", initial: "W", current: false },
-];
+const teams = [];
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-export default function SidebarTransition() {
+export default function SidebarTransition({
+  businessAdmissionRequestId,
+  userRole,
+}) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   return (
     <>
-      {" "}
       <Transition.Root show={sidebarOpen} as={Fragment}>
         <Dialog
           as="div"
@@ -88,11 +74,11 @@ export default function SidebarTransition() {
                   </div>
                 </Transition.Child>
                 {/* Sidebar component, swap this element with another sidebar if you like */}
-                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-indigo-600 px-6 pb-2">
+                <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-custom-fuchsia-07e px-6 pb-2">
                   <div className="flex h-16 shrink-0 items-center">
                     <img
                       className="h-8 w-auto"
-                      src="https://tailwindui.com/img/logos/mark.svg?color=white"
+                      src="/logo.png"
                       alt="Your Company"
                     />
                   </div>
@@ -100,33 +86,35 @@ export default function SidebarTransition() {
                     <ul role="list" className="flex flex-1 flex-col gap-y-7">
                       <li>
                         <ul role="list" className="-mx-2 space-y-1">
-                          {navigation.map((item) => (
-                            <li key={item.name}>
-                              <a
-                                href={item.href}
-                                className={classNames(
-                                  item.current
-                                    ? "bg-indigo-700 text-white"
-                                    : "text-indigo-200 hover:text-white hover:bg-indigo-700",
-                                  "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
-                                )}
-                              >
-                                <item.icon
+                          {navigation(businessAdmissionRequestId).map((item) =>
+                            item.role === userRole || item.role === "all" ? (
+                              <li key={item.name}>
+                                <Link
+                                  href={item.href}
                                   className={classNames(
                                     item.current
-                                      ? "text-white"
-                                      : "text-indigo-200 group-hover:text-white",
-                                    "h-6 w-6 shrink-0"
+                                      ? "bg-indigo-700 text-white"
+                                      : "text-white  hover:text-gray-100 hover:bg-indigo-700",
+                                    "group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold"
                                   )}
-                                  aria-hidden="true"
-                                />
-                                {item.name}
-                              </a>
-                            </li>
-                          ))}
+                                >
+                                  <item.icon
+                                    className={classNames(
+                                      item.current
+                                        ? "text-white"
+                                        : "text-indigo-200 group-hover:text-white",
+                                      "h-6 w-6 shrink-0"
+                                    )}
+                                    aria-hidden="true"
+                                  />
+                                  {item.name}
+                                </Link>
+                              </li>
+                            ) : null
+                          )}
                         </ul>
                       </li>
-                      <li>
+                      <li className="hidden">
                         <div className="text-xs font-semibold leading-6 text-indigo-200">
                           Your teams
                         </div>
@@ -151,6 +139,9 @@ export default function SidebarTransition() {
                           ))}
                         </ul>
                       </li>
+                      <li className="-mx-6 mt-auto">
+                        <ProfileButton />
+                      </li>
                     </ul>
                   </nav>
                 </div>
@@ -159,6 +150,7 @@ export default function SidebarTransition() {
           </div>
         </Dialog>
       </Transition.Root>
+      <SideBar3Menu setSidebarOpen={setSidebarOpen} />
     </>
   );
 }

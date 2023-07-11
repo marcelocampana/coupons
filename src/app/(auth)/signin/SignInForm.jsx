@@ -9,6 +9,7 @@ import { classNames } from "@/helpers/classnames";
 import ClientAuth from "@/services/ClientAuth";
 import UtilsErrorAlert from "../../components/UtilsErrorAlerts";
 import Input from "../../components/FormInput";
+import Link from "next/link";
 
 const SignInForm = () => {
   const { supabase } = useSupabase();
@@ -30,7 +31,7 @@ const SignInForm = () => {
 
       if (user) {
         if (user.user_metadata.role === "business-admin") {
-          router.push("/dashboard");
+          router.push("/dashboard/business-admin/business/home");
         } else if (user.user_metadata.role === "admin") {
           router.push("/dashboard/admin/business/list");
         } else router.push("/");
@@ -107,12 +108,12 @@ const SignInForm = () => {
               </div>
               <div>
                 <div className="text-sm leading-6 mb-3 text-right">
-                  <a
+                  <Link
                     href="/password-recovery"
                     className="font-semibold text-gray-600 hover:text-gray-800"
                   >
                     ¿Olvidaste la contraseña?
-                  </a>
+                  </Link>
                 </div>
 
                 <button
