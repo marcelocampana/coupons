@@ -10,10 +10,10 @@ const HeadStepsForm = ({ form1, form2, form3, formStep }) => {
     {
       name: "Datos del comercio",
       href: "#",
-      state,
+      state: "",
     },
-    { name: "Representante legal", href: "#", state },
-    { name: "Cuenta de acceso", href: "#", state },
+    { name: "Representante legal", href: "#", state: "" },
+    { name: "Cuenta de acceso", href: "#", state: "" },
   ];
   // console.log("step1Value", Object.keys(step1Value).length);
   // console.log("step2Value", Object.keys(step2Value).length);
