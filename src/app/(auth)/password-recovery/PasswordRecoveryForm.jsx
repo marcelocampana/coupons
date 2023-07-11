@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 import { useSupabase } from "@/app/supabase-provider";
-import { Auth } from "@/services/Auth";
-import { useRouter } from "next/navigation";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import Input from "../../components/FormInput";
