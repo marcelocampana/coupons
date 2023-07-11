@@ -1,6 +1,10 @@
-import Button from "./Button";
+"use client";
+
+import { useState } from "react";
+import CallToAction from "./CallToAction";
 
 const Header = () => {
+  const [open, setOpen] = useState(false);
   return (
     <>
       <div className="text-center mt-12 mb-36 text-white">
@@ -10,8 +14,8 @@ const Header = () => {
         </p>
 
         <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-          ¡Impulsa tu comercio en{" "}
-          <span className="text-custom-calypso-fe3">Chicureo </span> con{" "}
+          ¡Impulsa tu comercio{" "}
+          {/* <span className="text-custom-calypso-fe3">Chicureo </span>*/} con{" "}
           <span className="text-custom-fuchsia-07e"> Chicupón!</span>
         </h1>
         <div className="my-8 text-lg leading-8 text-gray-600">
@@ -21,7 +25,8 @@ const Header = () => {
           </p>
           <p className="font-bold">¡Únete a nuestra plataforma ahora!</p>
         </div>
-        <Button label="Inscribe tu comercio aquí" />
+        <CallToAction label="Inscribe tu comercio aquí" />
+
         <p className="text-sm mt-3 text-gray-500">
           *Promoción válida para inscripciones realizadas antes del lanzamiento
           oficial de Chicupón.

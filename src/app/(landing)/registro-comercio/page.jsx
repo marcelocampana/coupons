@@ -5,7 +5,7 @@ import ImageStep from "./ImageStep";
 import Header from "./Header";
 import Background2 from "./Background2";
 import Button from "./Button";
-import Modal from "./Modal";
+import CallToAction from "./CallToAction";
 
 const page = () => {
   return (
@@ -18,11 +18,9 @@ const page = () => {
       </Background>
       <Background2>
         <FAQ />
-        <Button label="¡Registra tu comercio ahora!" />
+        <CallToAction label="¡Registra tu comercio ahora!" />
       </Background2>
-
       <Footer />
-      <Modal />
     </>
   );
 };

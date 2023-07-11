@@ -7,7 +7,7 @@ const faqs = [
   {
     question: "¿Qué comercios pueden inscribirse en Chicupón?",
     answer:
-      "No importa si tienes un pequeño negocio, una tienda en línea o una cadena de tiendas, si tu comercio se encuentra en Chicureo, regístrate en Chicupón y aprovecha las ventajas que ofrecemos para impulsar tu negocio. Damos la bienvenida a una amplia variedad de comercios de Chicureo que deseen promocionar sus productos y servicios brindando un enfoque centrado y específico a los comercios de esta comuna. Te ofrecemos oportunidades únicas para llegar a una audiencia altamente relevante y comprometida con los descuentos y ofertas exclusivas del comercio local.",
+      "No importa si tienes un pequeño negocio, una tienda en línea o una cadena de tiendas, si tu comercio se encuentra en la zona oriente de Santiago, regístrate en Chicupón y aprovecha las ventajas que ofrecemos para impulsar tu negocio. Damos la bienvenida a una amplia variedad de comercios que deseen promocionar sus productos y servicios brindando un enfoque centrado y específico a los comercios de esta zona. Te ofrecemos oportunidades únicas para llegar a una audiencia altamente relevante y comprometida con los descuentos y ofertas exclusivas del comercio local.",
   },
   {
     question: "¿Qué beneficios ofrece Chicupón para mi comercio?",
